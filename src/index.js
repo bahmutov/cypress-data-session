@@ -11,6 +11,15 @@ function formDataKey(name) {
 // against the current data to determine if we need to re-run
 // the setup commands.
 Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
+  // check if we are using options / separate arguments
+  if (typeof name === 'object') {
+    const options = name
+    name = options.name
+    setup = options.setup
+    validate = options.validate
+    onInvalidated = options.onInvalidated
+  }
+
   const dataKey = formDataKey(name)
 
   const setupAndSaveData = () => {
