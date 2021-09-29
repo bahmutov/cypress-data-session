@@ -7,6 +7,7 @@
 - [Introduction to cypress-data-session package](https://youtu.be/As5yqkoZOx8)
 - [Use Data Alias Created Automatically By cypress-data-session](https://youtu.be/VQtjDGCuRzI)
 - [Create User Using cypress-data-session Command](https://youtu.be/P-sb5OHSNsM)
+- [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc)
 
 ## Install
 
