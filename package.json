@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "Cypress command for flexible test data setup",
   "main": "src/index.js",
+  "types": "src",
   "files": [
     "src"
   ],
