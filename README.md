@@ -1,4 +1,4 @@
-# cypress-data-session
+# cypress-data-session ![cypress version](https://img.shields.io/badge/cypress-8.5.0-brightgreen)
 > Cypress command for flexible test data setup
 
 ## Install
