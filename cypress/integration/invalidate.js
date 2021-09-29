@@ -4,6 +4,9 @@ import '../../src'
 
 describe('Data C', () => {
   it('exists under an alias', function () {
+    // force invalidation by putting some random data
+    Cypress.env('dataSession:C', 42)
+
     cy.dataSession(
       'C',
       () => 'c',
@@ -13,7 +16,9 @@ describe('Data C', () => {
       // if the validation fails (in this case, it is always called)
       cy.stub().as('invalidated'),
     )
+    // new value is computed and set
     cy.get('@C').should('equal', 'c')
-    cy.get('@invalidated').should('be.calledOnceWith', 'c')
+    // our initial wrong value was passed to onInvalidate argument
+    cy.get('@invalidated').should('be.calledOnceWith', 42)
   })
 })
