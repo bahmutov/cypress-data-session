@@ -33,6 +33,8 @@ If using JavaScript, point the spec at this package using the `///` comment
 /// <reference types="cypress-data-session" />
 ```
 
+See [src/index.d.ts](./src/index.d.ts)
+
 ## Use
 
 This example comes from [cypress/integration/spec.js](./cypress/integration/spec.js)
@@ -72,6 +74,18 @@ cy.dataSession(name, setupUser, validateUser, onInvalidated)
 ```
 
 See an example in the spec [cypress/integration/invalidate.js](./cypress/integration/invalidate.js) and video [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc).
+
+### Options object
+
+You can pass multiple parameters using a single options object, see [cypress/integration/options.js](./cypress/integration/options.js)
+
+```js
+cy.dataSession({
+  name: 'C',
+  setup: () => 'c',
+  validate: (x) => x === 'c',
+})
+```
 
 ## Examples
 

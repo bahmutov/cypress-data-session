@@ -1,3 +1,4 @@
+// @ts-check
 /// <reference path="../../src/index.d.ts" />
 
 import '../../src'
@@ -12,7 +13,7 @@ describe('Data A', () => {
     }
 
     function validate(x) {
-      cy.log('validating', x).then(() => {
+      return cy.log('validating', x).then(() => {
         return x === 'a'
       })
     }
