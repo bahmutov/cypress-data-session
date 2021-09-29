@@ -1,10 +1,17 @@
 /// <reference types="cypress" />
 
+function formDataKey(name) {
+  if (!name) {
+    throw new Error('Missing name')
+  }
+  return 'dataSession:' + name
+}
+
 // The predicate "validate" function checks the cached data
 // against the current data to determine if we need to re-run
 // the setup commands.
 Cypress.Commands.add('dataSession', (name, setup, validate) => {
-  const dataKey = 'dataSession:' + name
+  const dataKey = formDataKey(name)
 
   const setupAndSaveData = () => {
     cy.then(setup).then((data) => {
@@ -43,7 +50,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate) => {
 
 // add a simple method to clear data for a specific session
 Cypress.clearDataSession = (name) => {
-  const dataKey = 'dataSession:' + name
+  const dataKey = formDataKey(name)
   Cypress.env(dataKey, undefined)
   console.log('cleared data session "%s"', name)
 }
@@ -51,4 +58,9 @@ Cypress.clearDataSession = (name) => {
 // enable or disable data sessions
 Cypress.dataSessions = (enable) => {
   Cypress.env('dataSessions', Boolean(enable))
+}
+
+Cypress.getDataSession = (name) => {
+  const dataKey = formDataKey(name)
+  return Cypress.env(dataKey)
 }
