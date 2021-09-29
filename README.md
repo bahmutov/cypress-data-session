@@ -61,7 +61,7 @@ it('exists under an alias', function () {
 
 ### onInvalidated
 
-You can pass a function as the third argument to the `cy.dataSession` to be called if the "validate" returns false. This function will be called _before_ the "setup" function executes.
+You can pass a function as the last argument to the `cy.dataSession` to be called if the "validate" returns false. This function will be called _before_ the "setup" function executes.
 
 ```js
 function onInvalidated() {
