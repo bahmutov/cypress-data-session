@@ -93,7 +93,11 @@ cy.dataSession({
 
 ## Debugging
 
-This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them.
+This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them. How to set an environment variable depends on the operating system. From a Linux terminal we can use
+
+```shell
+$ DEBUG=cypress-data-session npx cypress open
+```
 
 ## See also
 
