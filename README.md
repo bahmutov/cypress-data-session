@@ -1,4 +1,5 @@
-# cypress-data-session ![cypress version](https://img.shields.io/badge/cypress-8.5.0-brightgreen)
+# cypress-data-session
+[![ci status][ci image]][ci url] [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-8.5.0-brightgreen)
 > Cypress command for flexible test data setup
 
 ## Videos
@@ -105,3 +106,8 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
+
+[ci image]: https://github.com/bahmutov/cypress-data-session/workflows/ci/badge.svg?branch=main
+[ci url]: https://github.com/bahmutov/cypress-data-session/actions
+[renovate-badge]: https://img.shields.io/badge/renovate-app-blue.svg
+[renovate-app]: https://renovateapp.com/
