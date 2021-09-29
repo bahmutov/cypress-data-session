@@ -9,6 +9,49 @@ $ npm install -D cypress-data-session
 $ yarn add -D cypress-data-session
 ```
 
+Import this package from the spec or from the support file
+
+```js
+// cypress/support/index.js
+import 'cypress-data-session'
+```
+
+### Types
+
+If using JavaScript, point the spec at this package using the `///` comment
+
+```js
+// cypress/integration/spec.js
+/// <reference types="cypress-data-session />
+```
+
+## Use
+
+This example comes from [cypress/integration/spec.js](./cypress/integration/spec.js)
+
+```js
+beforeEach(() => {
+  // let's say you want to set up the value "A"
+  cy.dataSession(
+    'A', // data name
+    () => 'a', // data creation commands
+    (x) => x === 'a', // data validation function
+  )
+})
+
+it('has object A', () => {
+  expect(Cypress.getDataSession('A')).to.equal('a')
+})
+```
+
+The value is automatically added as an alias, so you can use `function () { ... }` syntax for the test callback and access the above value using `this.A` property
+
+```js
+it('exists under an alias', function () {
+  expect(this.A).to.equal('a')
+})
+```
+
 ## See also
 
 Custom command creation and publishing to NPM described in these blog posts:

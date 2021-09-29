@@ -14,4 +14,8 @@ describe('Data A', () => {
   it('has object A', () => {
     expect(Cypress.getDataSession('A')).to.equal('a')
   })
+
+  it('exists under an alias', function () {
+    expect(this.A).to.equal('a')
+  })
 })

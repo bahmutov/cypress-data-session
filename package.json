@@ -16,7 +16,7 @@
   },
   "keywords": [
     "cypress",
-    "cypress-command"
+    "cypress-commands"
   ],
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "license": "MIT",
