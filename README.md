@@ -71,6 +71,8 @@ function onInvalidated() {
 cy.dataSession(name, setupUser, validateUser, onInvalidated)
 ```
 
+See an example in the spec [cypress/integration/invalidate.js](./cypress/integration/invalidate.js) and video [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc).
+
 ## Examples
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
