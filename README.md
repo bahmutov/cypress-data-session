@@ -77,6 +77,10 @@ See an example in the spec [cypress/integration/invalidate.js](./cypress/integra
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
 
+## Debugging
+
+This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them.
+
 ## See also
 
 Custom command creation and publishing to NPM described in these blog posts:
