@@ -1,6 +1,21 @@
 # cypress-data-session
 > Cypress command for flexible test data setup
 
+## Install
+
+```shell
+$ npm install -D cypress-data-session
+# or using Yarn
+$ yarn add -D cypress-data-session
+```
+
+## See also
+
+Custom command creation and publishing to NPM described in these blog posts:
+
+- [Writing a Custom Cypress Command](https://glebbahmutov.com/blog/writing-custom-cypress-command/)
+- [How to Publish Custom Cypress Command on NPM](https://glebbahmutov.com/blog/publishing-cypress-command/)
+
 ## Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2021

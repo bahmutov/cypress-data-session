@@ -20,6 +20,8 @@ Cypress.Commands.add('dataSession', (name, setup, validate) => {
       }
       // save the data for this session
       Cypress.env(dataKey, data)
+      // automatically create an alias
+      cy.wrap(data, { log: false }).as(name)
     })
   }
 
@@ -38,7 +40,10 @@ Cypress.Commands.add('dataSession', (name, setup, validate) => {
   cy.then(() => validate(value)).then((valid) => {
     if (valid) {
       cy.log(`data **${name}** is still valid`)
+      // yield the wrapped value to the next command in the test
       cy.wrap(value, { log: false })
+        // and set as an alias
+        .as(name)
       return
     }
 

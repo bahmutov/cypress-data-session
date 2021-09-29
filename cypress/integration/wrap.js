@@ -6,7 +6,7 @@ describe('Data B', () => {
   beforeEach(() => {
     cy.dataSession(
       'B', // data name
-      () => cy.wrap('b').as('B'), // data creation commands
+      () => 'b', // data creation commands
       (x) => x === 'b', // data validation function
     )
   })
@@ -16,6 +16,8 @@ describe('Data B', () => {
   })
 
   it('has saved the value as an alias', function () {
+    // the cy.dataSession automatically wraps the data yielded
+    // by the setup function and saves it as an alias
     expect(this.B).to.equal('b')
   })
 })
