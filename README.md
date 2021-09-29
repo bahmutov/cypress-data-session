@@ -1,6 +1,12 @@
 # cypress-data-session ![cypress version](https://img.shields.io/badge/cypress-8.5.0-brightgreen)
 > Cypress command for flexible test data setup
 
+## Videos
+
+- [Introduction to cypress-data-session package](https://youtu.be/As5yqkoZOx8)
+- [Use Data Alias Created Automatically By cypress-data-session](https://youtu.be/VQtjDGCuRzI)
+- [Create User Using cypress-data-session Command](https://youtu.be/P-sb5OHSNsM)
+
 ## Install
 
 ```shell
@@ -22,7 +28,7 @@ If using JavaScript, point the spec at this package using the `///` comment
 
 ```js
 // cypress/integration/spec.js
-/// <reference types="cypress-data-session />
+/// <reference types="cypress-data-session" />
 ```
 
 ## Use
