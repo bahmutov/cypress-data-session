@@ -1,0 +1,30 @@
+{
+  "name": "cypress-data-session",
+  "version": "1.0.0",
+  "description": "Cypress command for flexible test data setup",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "cypress run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahmutov/cypress-data-session.git"
+  },
+  "keywords": [
+    "cypress",
+    "cypress-command"
+  ],
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bahmutov/cypress-data-session/issues"
+  },
+  "homepage": "https://github.com/bahmutov/cypress-data-session#readme",
+  "devDependencies": {
+    "cypress": "^8.5.0",
+    "prettier": "^2.4.1"
+  }
+}
