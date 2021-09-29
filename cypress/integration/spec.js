@@ -18,4 +18,8 @@ describe('Data A', () => {
   it('exists under an alias', function () {
     expect(this.A).to.equal('a')
   })
+
+  it('can be fetched from the alias', () => {
+    cy.get('@A').should('equal', 'a')
+  })
 })

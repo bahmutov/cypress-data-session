@@ -59,6 +59,21 @@ it('exists under an alias', function () {
 })
 ```
 
+### onInvalidated
+
+You can pass a function as the third argument to the `cy.dataSession` to be called if the "validate" returns false. This function will be called _before_ the "setup" function executes.
+
+```js
+function onInvalidated() {
+  // clear user session for example
+}
+cy.dataSession(name, setupUser, validateUser, onInvalidated)
+```
+
+## Examples
+
+- [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
+
 ## See also
 
 Custom command creation and publishing to NPM described in these blog posts:

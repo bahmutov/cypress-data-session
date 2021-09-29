@@ -10,7 +10,7 @@ function formDataKey(name) {
 // The predicate "validate" function checks the cached data
 // against the current data to determine if we need to re-run
 // the setup commands.
-Cypress.Commands.add('dataSession', (name, setup, validate) => {
+Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   const dataKey = formDataKey(name)
 
   const setupAndSaveData = () => {
@@ -47,9 +47,16 @@ Cypress.Commands.add('dataSession', (name, setup, validate) => {
       return
     }
 
-    cy.log(`recompute data for **${name}**`)
-    // TODO: validate the value yielded by the setup
-    return setupAndSaveData()
+    cy.then(() => {
+      debugger
+      if (onInvalidated) {
+        return onInvalidated(value)
+      }
+    }).then(() => {
+      cy.log(`recompute data for **${name}**`)
+      // TODO: validate the value yielded by the setup
+      return setupAndSaveData()
+    })
   })
 })
 
