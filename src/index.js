@@ -12,6 +12,7 @@ function formDataKey(name) {
 // the setup commands.
 Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   let shareAcrossSpecs = false
+  let preSetup
   let recreate
 
   // check if we are using options / separate arguments
@@ -23,6 +24,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     onInvalidated = options.onInvalidated
     shareAcrossSpecs = options.shareAcrossSpecs
     recreate = options.recreate
+    preSetup = options.preSetup
   }
 
   const pluginDisabled = Cypress.env('dataSessions') === false
@@ -30,6 +32,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   const dataKey = formDataKey(name)
 
   const setupAndSaveData = () => {
+    if (preSetup) {
+      cy.then(preSetup)
+    }
     cy.then(setup).then((data) => {
       if (data === undefined) {
         throw new Error('dataSession cannot yield undefined')

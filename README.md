@@ -152,6 +152,29 @@ cy.dataSession({
 
 The first spec that creates it, saves it in the plugin file process. Then other specs can re-use this value (after validation, of course).
 
+### preSetup
+
+Sometimes you might need to run a few steps before the `setup` commands. While you could have these commands inside the `setup` function, it might make clear to anyone reading the code that these commands are preparing the data for the `setup` function. For example, you could check if the user you are about to create exists already and needs to be deleted first.
+
+```js
+cy.dataSession({
+  name: 'user',
+  preSetup () {
+    cy.task('findUser', 'Joe').then((user) => {
+      if (user) {
+        cy.task('deleteUser', user._id)
+      }
+    })
+  },
+  setup () {
+    // create the user "Joe"
+  },
+  validate (saved) {
+    // check if the user "Joe" exists
+  }
+})
+```
+
 ## Examples
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
