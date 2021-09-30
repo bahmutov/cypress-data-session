@@ -24,6 +24,15 @@ Import this package from the spec or from the support file
 import 'cypress-data-session'
 ```
 
+If you plan to use the [shareAcrossSpecs](#shareacrossspecs) option, you need to load this plugin from your plugin file
+
+```js
+// cypress/plugin/index.js
+module.exports = (on, config) => {
+  require('cypress-data-session/src/plugin')(on, config)
+}
+```
+
 ### Types
 
 If using JavaScript, point the spec at this package using the `///` comment
