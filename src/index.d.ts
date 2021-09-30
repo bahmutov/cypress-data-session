@@ -7,6 +7,7 @@ declare namespace Cypress {
     setup: Function
     validate: Validate
     onInvalidated?: Function
+    recreate?: Validate
     shareAcrossSpecs?: boolean
   }
 

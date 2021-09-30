@@ -114,6 +114,28 @@ cy.dataSession({
 })
 ```
 
+### recreate
+
+Using the options object you can pass another function to be called after the `validate` yields true. This function let's you to perform Cypress commands with the validated value to "finish" the recreation. For example, you could visit the page after setting the cookie from the data session to end on the page, just like the `setup` does.
+
+```js
+cy.dataSession({
+  name: 'logged in',
+  setup: () => {
+    // create user, visit the page, log in
+    // let's say we are on the page '/home
+    // save the cookie in the data session
+    cy.getCookie('connect.sid')
+  },
+  // assume the cookie is valid
+  validate: (c) => true,
+  recreate (cookie) => {
+    cy.setCookie(cookie)
+    cy.visit('/home')
+  }
+})
+```
+
 ### shareAcrossSpecs
 
 By default, the data session value is saved inside `Cypress.env` object. This object is reset whenever the spec gets reloaded (think Cmd+R press or the full browser reload). The object is gone when the `cypress run` finishes with a spec and opens another one. If you want the data value to persist across the browser reloads, or be shared across specs, use the `shareAcrossSpecs: true` option.

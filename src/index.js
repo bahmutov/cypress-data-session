@@ -12,6 +12,7 @@ function formDataKey(name) {
 // the setup commands.
 Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   let shareAcrossSpecs = false
+  let recreate
 
   // check if we are using options / separate arguments
   if (typeof name === 'object') {
@@ -21,6 +22,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     validate = options.validate
     onInvalidated = options.onInvalidated
     shareAcrossSpecs = options.shareAcrossSpecs
+    recreate = options.recreate
   }
 
   const pluginDisabled = Cypress.env('dataSessions') === false
@@ -68,14 +70,25 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
         return setupAndSaveData()
       }
 
+      function returnValue() {
+        // yield the wrapped value to the next command in the test
+        return (
+          cy
+            .wrap(value, { log: false })
+            // and set as an alias
+            .as(name)
+        )
+      }
+
       cy.then(() => validate(value)).then((valid) => {
         if (valid) {
           cy.log(`data **${name}** is still valid`)
-          // yield the wrapped value to the next command in the test
-          cy.wrap(value, { log: false })
-            // and set as an alias
-            .as(name)
-          return
+          if (Cypress._.isFunction(recreate)) {
+            cy.log(`recreating **${name}**`)
+            return cy.then(() => recreate(value)).then(returnValue)
+          }
+
+          return returnValue()
         }
 
         cy.then(() => {
