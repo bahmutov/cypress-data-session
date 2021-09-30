@@ -54,7 +54,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   cy.log(`dataSession **${name}**`)
 
-  cy.wrap(Cypress.env(dataKey))
+  cy.wrap(Cypress.env(dataKey), { log: false })
     .then((value) => {
       if (shareAcrossSpecs) {
         return cy.task('dataSession:load', dataKey)
