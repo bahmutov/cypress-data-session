@@ -61,7 +61,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
       }
     })
     .then((value) => {
-      if (value === undefined) {
+      // if the value is undefined or null,
+      // we need to re-run the setup commands
+      if (Cypress._.isNil(value)) {
         cy.log(`first time for session **${name}**`)
         return setupAndSaveData()
       }
