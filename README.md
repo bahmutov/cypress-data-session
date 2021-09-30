@@ -24,6 +24,15 @@ Import this package from the spec or from the support file
 import 'cypress-data-session'
 ```
 
+If you plan to use the [shareAcrossSpecs](#shareacrossspecs) option, you need to load this plugin from your plugin file
+
+```js
+// cypress/plugin/index.js
+module.exports = (on, config) => {
+  require('cypress-data-session/src/plugin')(on, config)
+}
+```
+
 ### Types
 
 If using JavaScript, point the spec at this package using the `///` comment
@@ -87,9 +96,32 @@ cy.dataSession({
 })
 ```
 
+### shareAcrossSpecs
+
+By default, the data session value is saved inside `Cypress.env` object. This object is reset whenever the spec gets reloaded (think Cmd+R press or the full browser reload). The object is gone when the `cypress run` finishes with a spec and opens another one. If you want the data value to persist across the browser reloads, or be shared across specs, use the `shareAcrossSpecs: true` option.
+
+```js
+cy.dataSession({
+  name: 'shared value',
+  setup: () => 'a',
+  validate: (x) => x === 'a',
+  shareAcrossSpecs: true,
+})
+```
+
+The first spec that creates it, saves it in the plugin file process. Then other specs can re-use this value (after validation, of course).
+
 ## Examples
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
+
+## Debugging
+
+This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them. How to set an environment variable depends on the operating system. From a Linux terminal we can use
+
+```shell
+$ DEBUG=cypress-data-session npx cypress open
+```
 
 ## See also
 

@@ -29,5 +29,8 @@
     "cypress": "^8.5.0",
     "prettier": "^2.4.1",
     "semantic-release": "^18.0.0"
+  },
+  "dependencies": {
+    "debug": "^4.3.2"
   }
 }
