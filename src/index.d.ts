@@ -4,6 +4,7 @@
 declare namespace Cypress {
   interface DataSessionOptions {
     name: string
+    preSetup?: Function
     setup: Function
     validate: Validate
     onInvalidated?: Function
