@@ -87,6 +87,21 @@ cy.dataSession({
 })
 ```
 
+### shareAcrossSpecs
+
+By default, the data session value is saved inside `Cypress.env` object. This object is reset whenever the spec gets reloaded (think Cmd+R press or the full browser reload). The object is gone when the `cypress run` finishes with a spec and opens another one. If you want the data value to persist across the browser reloads, or be shared across specs, use the `shareAcrossSpecs: true` option.
+
+```js
+cy.dataSession({
+  name: 'shared value',
+  setup: () => 'a',
+  validate: (x) => x === 'a',
+  shareAcrossSpecs: true,
+})
+```
+
+The first spec that creates it, saves it in the plugin file process. Then other specs can re-use this value (after validation, of course).
+
 ## Examples
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
