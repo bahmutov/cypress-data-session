@@ -8,6 +8,7 @@
 - [Use Data Alias Created Automatically By cypress-data-session](https://youtu.be/VQtjDGCuRzI)
 - [Create User Using cypress-data-session Command](https://youtu.be/P-sb5OHSNsM)
 - [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc)
+- [Share Data Across Specs Using cypress-data-session Plugin](https://youtu.be/ws4TitQJ7fQ)
 
 ## Install
 
@@ -69,6 +70,23 @@ The value is automatically added as an alias, so you can use `function () { ... 
 it('exists under an alias', function () {
   expect(this.A).to.equal('a')
 })
+```
+
+### validate
+
+The `validate` predicate can use Cypress commands, but must ultimately yield a boolean value.
+
+```js
+// validate a room id by fetching it from the database
+// using cy.task and finding the room
+const validate = (id) => {
+  return cy.task('getRooms', null, { log: false }).then((rooms) => {
+    // important: make sure to return a Boolean
+    // otherwise _.find returns undefined
+    // and Cypress cy.then callback returns the previous value
+    return Boolean(Cypress._.find(rooms, { _id: id }))
+  })
+}
 ```
 
 ### onInvalidated
