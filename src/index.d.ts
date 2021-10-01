@@ -6,7 +6,7 @@ declare namespace Cypress {
     name: string
     preSetup?: Function
     setup: Function
-    validate: Validate
+    validate?: Validate
     onInvalidated?: Function
     recreate?: Function
     shareAcrossSpecs?: boolean
@@ -25,7 +25,7 @@ declare namespace Cypress {
     dataSession(
       name: string,
       setup: Function,
-      validate: Validate,
+      validate?: Validate,
       onInvalidated?: Function,
     ): Chainable<any>
 

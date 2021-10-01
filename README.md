@@ -90,6 +90,15 @@ const validate = (id) => {
 }
 ```
 
+The `validate` function is optional. If you skip it, the `setup` will be run every time.
+
+```js
+// without "validate" function, the "setup" runs every time
+cy.dataSession(name, setup)
+```
+
+See [cypress/integration/validate.js](./cypress/integration/validate.js) spec.
+
 ### onInvalidated
 
 You can pass a function as the last argument to the `cy.dataSession` to be called if the "validate" returns false. This function will be called _before_ the "setup" function executes.

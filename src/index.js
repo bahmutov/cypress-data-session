@@ -27,6 +27,12 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     preSetup = options.preSetup
   }
 
+  if (!validate) {
+    // if the user has not provided a validate function
+    // then assume we need to recompute the data every time
+    validate = () => false
+  }
+
   const pluginDisabled = Cypress.env('dataSessions') === false
 
   const dataKey = formDataKey(name)
