@@ -29,8 +29,14 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   if (!validate) {
     // if the user has not provided a validate function
+    // or provided boolean value false,
     // then assume we need to recompute the data every time
     validate = () => false
+  } else {
+    if (validate === true) {
+      // the user says the data is fine, no need to recompute
+      validate = () => true
+    }
   }
 
   const pluginDisabled = Cypress.env('dataSessions') === false

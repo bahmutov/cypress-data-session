@@ -97,6 +97,13 @@ The `validate` function is optional. If you skip it, the `setup` will be run eve
 cy.dataSession(name, setup)
 ```
 
+You can also pass a boolean value, which is useful during debugging.
+
+```js
+validate: true // no need to recompute the value, it is still valid
+validate: false // call setup again
+```
+
 See [cypress/integration/validate.js](./cypress/integration/validate.js) spec.
 
 ### onInvalidated
