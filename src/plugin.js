@@ -26,9 +26,23 @@ function cypressDataSessionPlugin(on, config) {
     return value || null
   }
 
+  function deepClear(key) {
+    debug('deepClear', key)
+    debug('existing keys: %o', Object.keys(savedValues))
+
+    if (!key in savedValues) {
+      debug('could not find saved session "%s"', key)
+      return false
+    }
+    delete savedValues[key]
+
+    return true
+  }
+
   on('task', {
     'dataSession:save': deepSave,
     'dataSession:load': deepLoad,
+    'dataSession:clear': deepClear,
   })
 
   debug('registered plugin tasks')

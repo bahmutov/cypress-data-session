@@ -124,13 +124,18 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 // add a simple method to clear data for a specific session
 Cypress.clearDataSession = (name) => {
   const dataKey = formDataKey(name)
-  Cypress.env(dataKey, undefined)
+  if (!(dataKey in Cypress.env())) {
+    console.warn('Could not find data session under name "%s"', name)
+  } else {
+    Cypress.env(dataKey, undefined)
+  }
   // clear the data from the plugin side
-  cy.now('task', 'dataSession:save', {
-    key: dataKey,
-    value: undefined,
-  }).then(() => {
-    console.log('cleared data session "%s"', name)
+  cy.now('task', 'dataSession:clear', dataKey).then((cleared) => {
+    if (cleared) {
+      console.log('cleared data session "%s"', name)
+    } else {
+      console.warn('could not find saved data session for name "%s"', name)
+    }
   })
 }
 
