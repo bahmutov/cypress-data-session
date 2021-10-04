@@ -7,6 +7,14 @@ function formDataKey(name) {
   return 'dataSession:' + name
 }
 
+function isDataSessionKey(key) {
+  return key.startsWith('dataSession:')
+}
+
+function extractKey(key) {
+  return key.replace('dataSession:', '')
+}
+
 // The predicate "validate" function checks the cached data
 // against the current data to determine if we need to re-run
 // the setup commands.
@@ -126,6 +134,11 @@ Cypress.clearDataSession = (name) => {
   const dataKey = formDataKey(name)
   if (!(dataKey in Cypress.env())) {
     console.warn('Could not find data session under name "%s"', name)
+    const names = Object.keys(Cypress.env())
+      .filter(isDataSessionKey)
+      .map(extractKey)
+      .join(',')
+    console.warn('Available data sessions: %s', names)
   } else {
     Cypress.env(dataKey, undefined)
   }
