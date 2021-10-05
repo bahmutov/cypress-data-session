@@ -10,6 +10,7 @@
 - [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc)
 - [Share Data Across Specs Using cypress-data-session Plugin](https://youtu.be/ws4TitQJ7fQ)
 - [Use cy.dataSession To Create A User And Log In](https://youtu.be/PTlcRBgFJaM)
+- [Quickly Create A User And Log in Using Dependent Data Sessions](https://www.youtube.com/watch?v=0KTGc83wSoA)
 
 ## Install
 
