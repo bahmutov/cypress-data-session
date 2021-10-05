@@ -44,5 +44,6 @@ declare namespace Cypress {
     setDataSession: (name: string, data: any) => void
     clearDataSession: (name: string) => void
     dataSessions: (enable: boolean) => void
+    formDataSessionKey: (name: string) => string
   }
 }

@@ -91,10 +91,8 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
         const sessionData = { data, timestamp, dependsOnTimestamps }
         Cypress.env(dataKey, sessionData)
 
-        // TODO: implement dependsOn
-
         if (shareAcrossSpecs) {
-          cy.task('dataSession:save', { key: dataKey, value: data })
+          cy.task('dataSession:save', { key: dataKey, value: sessionData })
         }
       }
       // automatically create an alias
@@ -114,7 +112,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     .then((value) => {
       if (shareAcrossSpecs) {
         // TODO: save and load save data as Cypress.env does
-        return cy.task('dataSession:load', dataKey)
+        return cy
+          .task('dataSession:load', dataKey)
+          .then((loaded) => (loaded ? loaded.data : undefined))
       }
     })
     .then((value) => {
@@ -245,3 +245,5 @@ Cypress.setDataSession = (name, data) => {
   const sessionData = { data, timestamp, dependsOnTimestamps }
   Cypress.env(dataKey, sessionData)
 }
+
+Cypress.formDataSessionKey = formDataKey

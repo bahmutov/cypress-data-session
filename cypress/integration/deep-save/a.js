@@ -13,5 +13,14 @@ describe('deep save', () => {
     })
     // new value is computed and set
     cy.get('@deep-saved').should('equal', 'a')
+    // check the value in the plugins
+    const dataKey = Cypress.formDataSessionKey('deep-saved')
+    cy.task('dataSession:load', dataKey)
+      .should('deep.include', {
+        data: 'a',
+        dependsOnTimestamps: [],
+      })
+      .and('have.property', 'timestamp')
+      .and('to.be.a', 'number')
   })
 })
