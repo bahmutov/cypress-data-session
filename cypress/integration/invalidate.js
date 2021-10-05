@@ -6,7 +6,7 @@ import '../../src'
 describe('Data C', () => {
   it('exists under an alias', function () {
     // force invalidation by putting some random data
-    Cypress.env('dataSession:C', 42)
+    Cypress.setDataSession('C', 42)
 
     cy.dataSession(
       'C',

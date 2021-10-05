@@ -221,3 +221,18 @@ Cypress.getDataSession = (name) => {
   const dataKey = formDataKey(name)
   return Cypress.env(dataKey)
 }
+
+Cypress.setDataSession = (name, data) => {
+  if (Cypress._.isNil(data)) {
+    throw new Error(
+      `Cannot set data session "${name}" to undefined or undefined`,
+    )
+  }
+
+  const dataKey = formDataKey(name)
+  const timestamp = +new Date()
+  const dependsOnTimestamps = []
+
+  const sessionData = { data, timestamp, dependsOnTimestamps }
+  Cypress.env(dataKey, sessionData)
+}
