@@ -22,6 +22,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   let shareAcrossSpecs = false
   let preSetup
   let recreate
+  let dependsOn
 
   // check if we are using options / separate arguments
   if (typeof name === 'object') {
@@ -33,6 +34,15 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     shareAcrossSpecs = options.shareAcrossSpecs
     recreate = options.recreate
     preSetup = options.preSetup
+    dependsOn = options.dependsOn
+  }
+
+  // always have "dependsOn" as an array of strings
+  if (typeof dependsOn === 'string') {
+    dependsOn = [dependsOn]
+  }
+  if (typeof dependsOn === 'undefined') {
+    dependsOn = []
   }
 
   if (!validate) {
@@ -64,6 +74,8 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
         // only save the data if the plugin is enabled
         // save the data for this session
         Cypress.env(dataKey, data)
+
+        // TODO: implement dependsOn
 
         if (shareAcrossSpecs) {
           cy.task('dataSession:save', { key: dataKey, value: data })
