@@ -231,6 +231,7 @@ dependsOn: ['first', 'second', 'third']
 A few global utility methods are added to the `Cypress` object for accessing the data sessions. These methods are mostly utilities used internally.
 
 - `Cypress.getDataSession(name)`
+- `Cypress.getDataSessionDetails(name)`
 - `Cypress.clearDataSession(name)`
 - `Cypress.dataSessions(enable)`
 - `Cypress.setDataSession(name, value)`

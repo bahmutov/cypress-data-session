@@ -63,7 +63,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   function getDependsOnTimestamps() {
     return dependsOn.map((dep) => {
-      const ds = Cypress.getDataSession(dep)
+      const ds = Cypress.getDataSessionDetails(dep)
       if (!ds) {
         throw new Error(
           `Cannot find data session "${dep}" session "${name}" depends on`,
@@ -218,6 +218,15 @@ Cypress.dataSessions = (enable) => {
 }
 
 Cypress.getDataSession = (name) => {
+  const entry = Cypress.getDataSessionDetails(name)
+  if (!entry) {
+    return undefined
+  }
+
+  return entry.data
+}
+
+Cypress.getDataSessionDetails = (name) => {
   const dataKey = formDataKey(name)
   return Cypress.env(dataKey)
 }
