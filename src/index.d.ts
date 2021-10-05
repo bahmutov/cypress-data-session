@@ -10,6 +10,7 @@ declare namespace Cypress {
     onInvalidated?: Function
     recreate?: Function
     shareAcrossSpecs?: boolean
+    dependsOn?: string | string[]
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)
@@ -39,6 +40,8 @@ declare namespace Cypress {
   // utility global methods added to Cypress global object
   interface Cypress {
     getDataSession: (name: string) => any
+    getDataSessionDetails: (name: string) => any
+    setDataSession: (name: string, data: any) => void
     clearDataSession: (name: string) => void
     dataSessions: (enable: boolean) => void
   }

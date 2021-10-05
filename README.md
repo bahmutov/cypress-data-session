@@ -191,9 +191,50 @@ cy.dataSession({
 })
 ```
 
+### dependsOn
+
+A data session can depend on another data session or even multiple data sessions. For example, the data session "logged in user" can depend on the "created user" data session. If the "parent" session changes, we need to recompute all sessions that depend on it.
+
+```js
+cy.dataSession({
+  name: 'created user',
+  setup () {
+    // create a user
+  }
+})
+
+cy.dataSession({
+  name: 'logged in user',
+  dependsOn: 'created user',
+  setup () {
+    // take the user object from
+    // the data session "created user"
+    // and log in
+  }
+})
+```
+
+If the "created user" gets invalidated and recomputed (its `setup` method runs again), then the data session "logged in user" is invalidated automatically.
+
+To list dependencies on multiple data sessions, pass an array of names
+
+```js
+dependsOn: ['first', 'second', 'third']
+```
+
 ## Examples
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
+
+## Global methods
+
+A few global utility methods are added to the `Cypress` object for accessing the data sessions. These methods are mostly utilities used internally.
+
+- `Cypress.getDataSession(name)`
+- `Cypress.getDataSessionDetails(name)`
+- `Cypress.clearDataSession(name)`
+- `Cypress.dataSessions(enable)`
+- `Cypress.setDataSession(name, value)`
 
 ## Debugging
 

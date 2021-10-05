@@ -61,6 +61,18 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   const dataKey = formDataKey(name)
 
+  function getDependsOnTimestamps() {
+    return dependsOn.map((dep) => {
+      const ds = Cypress.getDataSessionDetails(dep)
+      if (!ds) {
+        throw new Error(
+          `Cannot find data session "${dep}" session "${name}" depends on`,
+        )
+      }
+      return ds.timestamp
+    })
+  }
+
   const setupAndSaveData = () => {
     if (preSetup) {
       cy.then(preSetup)
@@ -73,7 +85,11 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
       if (!pluginDisabled) {
         // only save the data if the plugin is enabled
         // save the data for this session
-        Cypress.env(dataKey, data)
+        const timestamp = +new Date()
+        const dependsOnTimestamps = getDependsOnTimestamps()
+
+        const sessionData = { data, timestamp, dependsOnTimestamps }
+        Cypress.env(dataKey, sessionData)
 
         // TODO: implement dependsOn
 
@@ -93,9 +109,11 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   cy.log(`dataSession **${name}**`)
 
-  cy.wrap(Cypress.env(dataKey), { log: false })
+  const entry = Cypress.env(dataKey)
+  cy.wrap(entry ? entry.data : undefined, { log: false })
     .then((value) => {
       if (shareAcrossSpecs) {
+        // TODO: save and load save data as Cypress.env does
         return cy.task('dataSession:load', dataKey)
       }
     })
@@ -117,15 +135,45 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
         )
       }
 
+      /**
+       * Looks up the timestamps from the data sessions
+       * this session depends on. If any of the timestamps
+       * are different, that means a "parent" data session
+       * was recomputed and we must recompute our data.
+       */
+      function parentsRecomputed() {
+        if (!entry) {
+          return false
+        }
+        if (!entry.dependsOnTimestamps) {
+          throw new Error(
+            `Missing depends on timestamps for data session "${name}"`,
+          )
+        }
+        const currentTimestamps = getDependsOnTimestamps()
+        const same = Cypress._.isEqual(
+          entry.dependsOnTimestamps,
+          currentTimestamps,
+        )
+        return same
+      }
+
       cy.then(() => validate(value)).then((valid) => {
         if (valid) {
-          cy.log(`data **${name}** is still valid`)
-          if (Cypress._.isFunction(recreate)) {
-            cy.log(`recreating **${name}**`)
-            return cy.then(() => recreate(value)).then(returnValue)
-          }
+          const parentSessionsAreTheSame = parentsRecomputed()
+          if (!parentSessionsAreTheSame) {
+            cy.log(
+              `recomputing **${name}** because a parent session has been recomputed`,
+            )
+          } else {
+            cy.log(`data **${name}** is still valid`)
+            if (Cypress._.isFunction(recreate)) {
+              cy.log(`recreating **${name}**`)
+              return cy.then(() => recreate(value)).then(returnValue)
+            }
 
-          return returnValue()
+            return returnValue()
+          }
         }
 
         cy.then(() => {
@@ -170,6 +218,30 @@ Cypress.dataSessions = (enable) => {
 }
 
 Cypress.getDataSession = (name) => {
+  const entry = Cypress.getDataSessionDetails(name)
+  if (!entry) {
+    return undefined
+  }
+
+  return entry.data
+}
+
+Cypress.getDataSessionDetails = (name) => {
   const dataKey = formDataKey(name)
   return Cypress.env(dataKey)
+}
+
+Cypress.setDataSession = (name, data) => {
+  if (Cypress._.isNil(data)) {
+    throw new Error(
+      `Cannot set data session "${name}" to undefined or undefined`,
+    )
+  }
+
+  const dataKey = formDataKey(name)
+  const timestamp = +new Date()
+  const dependsOnTimestamps = []
+
+  const sessionData = { data, timestamp, dependsOnTimestamps }
+  Cypress.env(dataKey, sessionData)
 }
