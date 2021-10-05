@@ -10,6 +10,7 @@ declare namespace Cypress {
     onInvalidated?: Function
     recreate?: Function
     shareAcrossSpecs?: boolean
+    dependsOn?: string | string[]
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)

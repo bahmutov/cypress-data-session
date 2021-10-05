@@ -25,25 +25,71 @@ describe('Dependent data session', () => {
       // the data is always valid
       // and does not need to be re-computed
       validate: true,
-      // TODO: implement dependsOn
-      // dependsOn: ['parent'],
+      dependsOn: ['parent'],
     }
-    cy.dataSession(childOptions)
+    cy.dataSession(childOptions).then(() => {
+      const childDataSession = Cypress.getDataSession('child')
+      expect(childDataSession)
+        .to.have.property('dependsOnTimestamps')
+        .to.be.an('Array')
+        .and.have.length(1)
 
-    cy.get('@parentSetup').should('be.calledOnce').invoke('resetHistory')
-    cy.get('@childSetup')
-      .should('be.calledOnce')
-      .invoke('resetHistory')
-      .then(() => {
-        cy.dataSession(parentOptions)
-        // the parent data is re-computed because it does not have
-        // the "validate" property
-        cy.get('@parentSetup').should('be.calledOnce')
-        // and the child data should be recomputed
-        // since it depends on the parent, and the parent was recomputed
-        cy.dataSession(childOptions)
-        // TODO: implement dependsOn and invalidating data
-        // cy.get('@childSetup').should('be.calledOnce')
-      })
+      cy.get('@parentSetup')
+        .should('be.calledOnce')
+        .invoke('resetHistory')
+        .then(() => {
+          // confirm the internals
+          const parentDataSession = Cypress.getDataSession('parent')
+          expect(parentDataSession).to.have.keys(
+            'data',
+            'timestamp',
+            'dependsOnTimestamps',
+          )
+          expect(parentDataSession).to.have.property('data', 1)
+          expect(parentDataSession)
+            .to.have.property('dependsOnTimestamps')
+            .to.be.an('Array').to.be.empty
+          const parentTimestamp = parentDataSession.timestamp
+          expect(parentTimestamp, 'parent timestamp').to.be.a('number')
+          expect(
+            childDataSession.dependsOnTimestamps[0],
+            'child has parent timestamp',
+          ).to.equal(parentTimestamp)
+
+          cy.get('@childSetup')
+            .should('be.calledOnce')
+            .invoke('resetHistory')
+            .then(() => {
+              cy.log('recomputing the parent')
+              cy.dataSession(parentOptions)
+              // the parent data is re-computed because it does not have
+              // the "validate" property
+              cy.get('@parentSetup')
+                .should('be.calledOnce')
+                .then(() => {
+                  const newParentDataSession = Cypress.getDataSession('parent')
+                  expect(newParentDataSession).to.have.keys(
+                    'data',
+                    'timestamp',
+                    'dependsOnTimestamps',
+                  )
+                  expect(newParentDataSession).to.have.property('data', 1)
+                  const newParentTimestamp = newParentDataSession.timestamp
+                  expect(newParentTimestamp, 'new parent timestamp').to.be.a(
+                    'number',
+                  )
+                  expect(
+                    newParentTimestamp,
+                    'new timestamp > prev timestamp',
+                  ).to.be.greaterThan(parentTimestamp)
+
+                  // and the child data should be recomputed
+                  // since it depends on the parent, and the parent was recomputed
+                  cy.dataSession(childOptions)
+                  cy.get('@childSetup').should('be.calledOnce')
+                })
+            })
+        })
+    })
   })
 })
