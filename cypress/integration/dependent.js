@@ -28,7 +28,7 @@ describe('Dependent data session', () => {
       dependsOn: ['parent'],
     }
     cy.dataSession(childOptions).then(() => {
-      const childDataSession = Cypress.getDataSession('child')
+      const childDataSession = Cypress.getDataSessionDetails('child')
       expect(childDataSession)
         .to.have.property('dependsOnTimestamps')
         .to.be.an('Array')
@@ -39,7 +39,7 @@ describe('Dependent data session', () => {
         .invoke('resetHistory')
         .then(() => {
           // confirm the internals
-          const parentDataSession = Cypress.getDataSession('parent')
+          const parentDataSession = Cypress.getDataSessionDetails('parent')
           expect(parentDataSession).to.have.keys(
             'data',
             'timestamp',
@@ -67,7 +67,8 @@ describe('Dependent data session', () => {
               cy.get('@parentSetup')
                 .should('be.calledOnce')
                 .then(() => {
-                  const newParentDataSession = Cypress.getDataSession('parent')
+                  const newParentDataSession =
+                    Cypress.getDataSessionDetails('parent')
                   expect(newParentDataSession).to.have.keys(
                     'data',
                     'timestamp',
