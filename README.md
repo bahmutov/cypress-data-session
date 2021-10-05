@@ -236,6 +236,7 @@ A few global utility methods are added to the `Cypress` object for accessing the
 - `Cypress.clearDataSession(name)`
 - `Cypress.dataSessions(enable)`
 - `Cypress.setDataSession(name, value)`
+- `Cypress.formDataSessionKey(name)`
 
 ## Debugging
 
