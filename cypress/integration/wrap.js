@@ -4,7 +4,7 @@ import '../..'
 
 describe('Data B', () => {
   beforeEach(() => {
-    cy.dataSession2(
+    cy.dataSession(
       'B', // data name
       () => 'b', // data creation commands
       (x) => x === 'b', // data validation function
