@@ -1,6 +1,4 @@
 // @ts-check
-/// <reference path="../../../src/index.d.ts" />
-
 import '../../../src'
 
 describe('deep save', () => {

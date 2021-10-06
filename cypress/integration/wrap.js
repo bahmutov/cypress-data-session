@@ -1,11 +1,10 @@
 // @ts-check
-/// <reference path="../../src/index.d.ts" />
 
 import '../..'
 
 describe('Data B', () => {
   beforeEach(() => {
-    cy.dataSession(
+    cy.dataSession2(
       'B', // data name
       () => 'b', // data creation commands
       (x) => x === 'b', // data validation function
