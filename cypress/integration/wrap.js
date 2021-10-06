@@ -1,5 +1,4 @@
 // @ts-check
-/// <reference path="../../src/index.d.ts" />
 
 import '../..'
 
