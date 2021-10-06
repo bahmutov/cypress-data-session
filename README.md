@@ -11,6 +11,7 @@
 - [Share Data Across Specs Using cypress-data-session Plugin](https://youtu.be/ws4TitQJ7fQ)
 - [Use cy.dataSession To Create A User And Log In](https://youtu.be/PTlcRBgFJaM)
 - [Quickly Create A User And Log in Using Dependent Data Sessions](https://www.youtube.com/watch?v=0KTGc83wSoA)
+- [Introduction To cypress-data-session Plugin](https://youtu.be/7ipCvJQixI0)
 
 ## Install
 
