@@ -32,4 +32,12 @@ describe('global session methods', () => {
     const ds = Cypress.getDataSession('C')
     expect(ds).to.equal('c')
   })
+
+  it('lists data sessions', () => {
+    const sessions = Cypress.dataSessions()
+    expect(sessions).to.deep.include({
+      name: 'C',
+      value: 'c',
+    })
+  })
 })

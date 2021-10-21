@@ -214,6 +214,24 @@ Cypress.clearDataSession = (name) => {
 
 // enable or disable data sessions
 Cypress.dataSessions = (enable) => {
+  if (enable === undefined) {
+    const env = Cypress.env()
+    const sessions = Cypress._.map(env, (value, key) => {
+      if (isDataSessionKey(key)) {
+        return {
+          name: extractKey(key),
+          value: value.data,
+        }
+      }
+    }).filter(Boolean)
+
+    console.table(sessions)
+    return sessions
+  }
+
+  if (typeof enable !== 'boolean') {
+    throw new Error('dataSessions argument must be a boolean or undefined')
+  }
   Cypress.env('dataSessions', Boolean(enable))
 }
 

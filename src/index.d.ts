@@ -43,7 +43,10 @@ declare namespace Cypress {
     getDataSessionDetails: (name: string) => any
     setDataSession: (name: string, data: any) => void
     clearDataSession: (name: string) => void
-    dataSessions: (enable: boolean) => void
+    /**
+     * Without any arguments lists all current data sessions.
+     */
+    dataSessions: (enable?: boolean) => void
     formDataSessionKey: (name: string) => string
   }
 }

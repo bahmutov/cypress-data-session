@@ -241,6 +241,10 @@ A few global utility methods are added to the `Cypress` object for accessing the
 - `Cypress.setDataSession(name, value)`
 - `Cypress.formDataSessionKey(name)`
 
+### dataSessions
+
+Without any arguments, this static method lists all current data sessions.
+
 ## Debugging
 
 This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them. How to set an environment variable depends on the operating system. From a Linux terminal we can use
