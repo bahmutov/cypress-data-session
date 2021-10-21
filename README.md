@@ -2,6 +2,8 @@
 [![ci status][ci image]][ci url] [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-8.6.0-brightgreen)
 > Cypress command for flexible test data setup
 
+Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/)
+
 ## Videos
 
 - [Introduction to cypress-data-session package](https://youtu.be/As5yqkoZOx8)
