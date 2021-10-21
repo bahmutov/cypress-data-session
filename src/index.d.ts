@@ -42,7 +42,14 @@ declare namespace Cypress {
     getDataSession: (name: string) => any
     getDataSessionDetails: (name: string) => any
     setDataSession: (name: string, data: any) => void
+    /**
+     * Clears a particular session by name.
+     */
     clearDataSession: (name: string) => void
+    /**
+     * Clears all data sessions from memory.
+     */
+    clearDataSessions: () => void
     /**
      * Without any arguments lists all current data sessions.
      */

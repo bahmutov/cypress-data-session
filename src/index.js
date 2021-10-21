@@ -189,6 +189,14 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     })
 })
 
+Cypress.clearDataSessions = () => {
+  const env = Cypress.env()
+  Cypress._.map(env, (value, key) => {
+    if (isDataSessionKey(key)) {
+      Cypress.clearDataSession(extractKey(key))
+    }
+  })
+}
 // add a simple method to clear data for a specific session
 Cypress.clearDataSession = (name) => {
   const dataKey = formDataKey(name)
@@ -217,7 +225,7 @@ Cypress.dataSessions = (enable) => {
   if (enable === undefined) {
     const env = Cypress.env()
     const sessions = Cypress._.map(env, (value, key) => {
-      if (isDataSessionKey(key)) {
+      if (isDataSessionKey(key) && value) {
         return {
           name: extractKey(key),
           value: value.data,

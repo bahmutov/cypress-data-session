@@ -237,6 +237,7 @@ A few global utility methods are added to the `Cypress` object for accessing the
 - `Cypress.getDataSession(name)`
 - `Cypress.getDataSessionDetails(name)`
 - `Cypress.clearDataSession(name)`
+- `Cypress.clearDataSessions()`
 - `Cypress.dataSessions(enable)`
 - `Cypress.setDataSession(name, value)`
 - `Cypress.formDataSessionKey(name)`
@@ -244,6 +245,10 @@ A few global utility methods are added to the `Cypress` object for accessing the
 ### dataSessions
 
 Without any arguments, this static method lists all current data sessions.
+
+### clearDataSessions
+
+Clears all current data sessions from memory.
 
 ## Debugging
 
