@@ -141,7 +141,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
       }
 
       return sha256(setupSource).then((setupHash) => {
-        if (entry.setupHash && entry.setupHash !== setupHash) {
+        if (entry && entry.setupHash && entry.setupHash !== setupHash) {
           // the setup function has changed,
           // we need to re-run the setup commands
           cy.log(`setup function changed for session **${name}**`)
