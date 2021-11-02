@@ -52,6 +52,14 @@ See [src/index.d.ts](./src/index.d.ts)
 
 ## Use
 
+You can call `cy.dataSession` with simple 3 arguments or with an options object that allows you to pass more options.
+
+### three arguments
+
+```js
+cy.dataSession(sessionName, setupFunction, validateValueFunction)
+```
+
 This example comes from [cypress/integration/spec.js](./cypress/integration/spec.js)
 
 ```js
@@ -76,6 +84,8 @@ it('exists under an alias', function () {
   expect(this.A).to.equal('a')
 })
 ```
+
+Note: if the `setup` function's text changes, the session is recomputed.
 
 ### validate
 
