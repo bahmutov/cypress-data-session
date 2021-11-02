@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+const sha256 = require('./sha')
+
 function formDataKey(name) {
   if (!name) {
     throw new Error('Missing name')
@@ -35,6 +37,10 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     recreate = options.recreate
     preSetup = options.preSetup
     dependsOn = options.dependsOn
+  }
+
+  if (typeof setup !== 'function') {
+    throw new Error('setup must be a function')
   }
 
   // always have "dependsOn" as an array of strings
@@ -73,6 +79,8 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     })
   }
 
+  const setupSource = setup.toString()
+
   const setupAndSaveData = () => {
     if (preSetup) {
       cy.then(preSetup)
@@ -82,21 +90,28 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
         throw new Error('dataSession cannot yield undefined')
       }
 
-      if (!pluginDisabled) {
-        // only save the data if the plugin is enabled
-        // save the data for this session
-        const timestamp = +new Date()
-        const dependsOnTimestamps = getDependsOnTimestamps()
+      return sha256(setupSource).then((setupHash) => {
+        if (!pluginDisabled) {
+          // only save the data if the plugin is enabled
+          // save the data for this session
+          const timestamp = +new Date()
+          const dependsOnTimestamps = getDependsOnTimestamps()
 
-        const sessionData = { data, timestamp, dependsOnTimestamps }
-        Cypress.env(dataKey, sessionData)
+          const sessionData = {
+            data,
+            timestamp,
+            dependsOnTimestamps,
+            setupHash,
+          }
+          Cypress.env(dataKey, sessionData)
 
-        if (shareAcrossSpecs) {
-          cy.task('dataSession:save', { key: dataKey, value: sessionData })
+          if (shareAcrossSpecs) {
+            cy.task('dataSession:save', { key: dataKey, value: sessionData })
+          }
         }
-      }
-      // automatically create an alias
-      cy.wrap(data, { log: false }).as(name)
+        // automatically create an alias
+        cy.wrap(data, { log: false }).as(name)
+      })
     })
   }
 
@@ -125,65 +140,74 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
         return setupAndSaveData()
       }
 
-      function returnValue() {
-        // yield the wrapped value to the next command in the test
-        return (
-          cy
-            .wrap(value, { log: false })
-            // and set as an alias
-            .as(name)
-        )
-      }
-
-      /**
-       * Looks up the timestamps from the data sessions
-       * this session depends on. If any of the timestamps
-       * are different, that means a "parent" data session
-       * was recomputed and we must recompute our data.
-       */
-      function parentsRecomputed() {
-        if (!entry) {
-          return false
+      return sha256(setupSource).then((setupHash) => {
+        if (entry.setupHash && entry.setupHash !== setupHash) {
+          // the setup function has changed,
+          // we need to re-run the setup commands
+          cy.log(`setup function changed for session **${name}**`)
+          return setupAndSaveData()
         }
-        if (!entry.dependsOnTimestamps) {
-          throw new Error(
-            `Missing depends on timestamps for data session "${name}"`,
+
+        function returnValue() {
+          // yield the wrapped value to the next command in the test
+          return (
+            cy
+              .wrap(value, { log: false })
+              // and set as an alias
+              .as(name)
           )
         }
-        const currentTimestamps = getDependsOnTimestamps()
-        const same = Cypress._.isEqual(
-          entry.dependsOnTimestamps,
-          currentTimestamps,
-        )
-        return same
-      }
 
-      cy.then(() => validate(value)).then((valid) => {
-        if (valid) {
-          const parentSessionsAreTheSame = parentsRecomputed()
-          if (!parentSessionsAreTheSame) {
-            cy.log(
-              `recomputing **${name}** because a parent session has been recomputed`,
-            )
-          } else {
-            cy.log(`data **${name}** is still valid`)
-            if (Cypress._.isFunction(recreate)) {
-              cy.log(`recreating **${name}**`)
-              return cy.then(() => recreate(value)).then(returnValue)
-            }
-
-            return returnValue()
+        /**
+         * Looks up the timestamps from the data sessions
+         * this session depends on. If any of the timestamps
+         * are different, that means a "parent" data session
+         * was recomputed and we must recompute our data.
+         */
+        function parentsRecomputed() {
+          if (!entry) {
+            return false
           }
+          if (!entry.dependsOnTimestamps) {
+            throw new Error(
+              `Missing depends on timestamps for data session "${name}"`,
+            )
+          }
+          const currentTimestamps = getDependsOnTimestamps()
+          const same = Cypress._.isEqual(
+            entry.dependsOnTimestamps,
+            currentTimestamps,
+          )
+          return same
         }
 
-        cy.then(() => {
-          if (onInvalidated) {
-            return onInvalidated(value)
+        cy.then(() => validate(value)).then((valid) => {
+          if (valid) {
+            const parentSessionsAreTheSame = parentsRecomputed()
+            if (!parentSessionsAreTheSame) {
+              cy.log(
+                `recomputing **${name}** because a parent session has been recomputed`,
+              )
+            } else {
+              cy.log(`data **${name}** is still valid`)
+              if (Cypress._.isFunction(recreate)) {
+                cy.log(`recreating **${name}**`)
+                return cy.then(() => recreate(value)).then(returnValue)
+              }
+
+              return returnValue()
+            }
           }
-        }).then(() => {
-          cy.log(`recompute data for **${name}**`)
-          // TODO: validate the value yielded by the setup
-          return setupAndSaveData()
+
+          cy.then(() => {
+            if (onInvalidated) {
+              return onInvalidated(value)
+            }
+          }).then(() => {
+            cy.log(`recompute data for **${name}**`)
+            // TODO: validate the value yielded by the setup
+            return setupAndSaveData()
+          })
         })
       })
     })

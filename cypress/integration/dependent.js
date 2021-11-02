@@ -43,6 +43,7 @@ describe('Dependent data session', () => {
             'data',
             'timestamp',
             'dependsOnTimestamps',
+            'setupHash',
           )
           expect(parentDataSession).to.have.property('data', 1)
           expect(parentDataSession)
@@ -72,6 +73,7 @@ describe('Dependent data session', () => {
                     'data',
                     'timestamp',
                     'dependsOnTimestamps',
+                    'setupHash',
                   )
                   expect(newParentDataSession).to.have.property('data', 1)
                   const newParentTimestamp = newParentDataSession.timestamp
@@ -147,6 +149,7 @@ describe('Dependent data session across specs', () => {
               'data',
               'timestamp',
               'dependsOnTimestamps',
+              'setupHash',
             )
             expect(parentDataSession).to.have.property('data', 1)
             expect(parentDataSession)
@@ -176,6 +179,7 @@ describe('Dependent data session across specs', () => {
                       'data',
                       'timestamp',
                       'dependsOnTimestamps',
+                      'setupHash',
                     )
                     expect(newParentDataSession).to.have.property('data', 1)
                     const newParentTimestamp = newParentDataSession.timestamp
