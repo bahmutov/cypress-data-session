@@ -31,7 +31,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   if (typeof name === 'object') {
     const options = name
     name = options.name
-    init = options.init
+    if ('init' in options) {
+      init = options.init
+    }
     setup = options.setup
     validate = options.validate
     onInvalidated = options.onInvalidated
@@ -140,6 +142,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
       // if the value is undefined or null,
       // try generating it using the "init" callback
       if (Cypress._.isNil(value)) {
+        if (!Cypress._.isFunction(init)) {
+          throw new Error('dataSession: init must be a function')
+        }
         return cy.then(init).then((initValue) => {
           if (Cypress._.isNil(initValue)) {
             // we need to re-run the setup commands
