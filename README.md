@@ -236,6 +236,18 @@ To list dependencies on multiple data sessions, pass an array of names
 dependsOn: ['first', 'second', 'third']
 ```
 
+## Flow
+
+Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.
+
+- First, the code pulls cached data for the session name.
+- if there is no cached value:
+  - it calls `preSetup` and `setup` methods and saves the value
+- else (there is a cached value):
+  - it calls `validate` with the cached value
+  - if the `validate` returns `true`, the code calls `recreate` method
+  - else it has to recompute the value, so it calls `onInvalidated`, `preSetup`, and `setup` methods
+
 ## Examples
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
