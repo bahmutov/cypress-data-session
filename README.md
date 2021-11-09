@@ -236,13 +236,44 @@ To list dependencies on multiple data sessions, pass an array of names
 dependsOn: ['first', 'second', 'third']
 ```
 
+### init
+
+Sometimes the data is generated, but sometimes we want to first see if we can load / initialize it the very first time (when there is nothing in the cache). This is where the `init` callback is useful. For example, let's say we are creating a special test user using the method `setup` and store its ID in the cache.
+
+```js
+cy.dataSession({
+  name: 'test user',
+  setup () {
+    cy.task('createUser') // yields the user ID
+  },
+  validate: Cypress._.isString
+})
+```
+
+But what happens if there is a test user already created by the previous tests? The very first time we run the data session, we want to check if there is a test user, and if it exists, store its ID and NOT call the `setup` function. Thus we add the `init` function
+
+```js
+cy.dataSession({
+  ...
+  init () {
+    cy.task('findUser', 'test user') // yields the ID if found
+  }
+})
+```
+
+The above example will find the test user the very first time the command runs, since there is nothing in the data session yet. Then it validates the ID. If there is no ID, it runs the `setup` function to create the test user. If there is a test user, and it returned the ID from the `init` method, then it is cached (as if the `setup` method created it), and the test continues.
+
 ## Flow
 
-Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.
+Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `init`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.
 
 - First, the code pulls cached data for the session name.
 - if there is no cached value:
-  - it calls `preSetup` and `setup` methods and saves the value
+  - it calls the `init` method, which might return a value
+  - if there is a value, and it passes `validate` callback
+    - it saves the value in the data session and finishes
+    - else it needs to generate the real value and save it
+      - it calls `preSetup` and `setup` methods and saves the value
 - else (there is a cached value):
   - it calls `validate` with the cached value
   - if the `validate` returns `true`, the code calls `recreate` method

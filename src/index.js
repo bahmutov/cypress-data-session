@@ -22,6 +22,7 @@ function extractKey(key) {
 // the setup commands.
 Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   let shareAcrossSpecs = false
+  let init = Cypress._.noop
   let preSetup
   let recreate
   let dependsOn
@@ -30,6 +31,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
   if (typeof name === 'object') {
     const options = name
     name = options.name
+    if ('init' in options) {
+      init = options.init
+    }
     setup = options.setup
     validate = options.validate
     onInvalidated = options.onInvalidated
@@ -81,38 +85,40 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   const setupSource = setup.toString()
 
+  const saveData = (data) => {
+    if (data === undefined) {
+      throw new Error('dataSession cannot yield undefined')
+    }
+
+    return sha256(setupSource).then((setupHash) => {
+      if (!pluginDisabled) {
+        // only save the data if the plugin is enabled
+        // save the data for this session
+        const timestamp = +new Date()
+        const dependsOnTimestamps = getDependsOnTimestamps()
+
+        const sessionData = {
+          data,
+          timestamp,
+          dependsOnTimestamps,
+          setupHash,
+        }
+        Cypress.env(dataKey, sessionData)
+
+        if (shareAcrossSpecs) {
+          cy.task('dataSession:save', { key: dataKey, value: sessionData })
+        }
+      }
+      // automatically create an alias
+      cy.wrap(data, { log: false }).as(name)
+    })
+  }
+
   const setupAndSaveData = () => {
     if (preSetup) {
       cy.then(preSetup)
     }
-    cy.then(setup).then((data) => {
-      if (data === undefined) {
-        throw new Error('dataSession cannot yield undefined')
-      }
-
-      return sha256(setupSource).then((setupHash) => {
-        if (!pluginDisabled) {
-          // only save the data if the plugin is enabled
-          // save the data for this session
-          const timestamp = +new Date()
-          const dependsOnTimestamps = getDependsOnTimestamps()
-
-          const sessionData = {
-            data,
-            timestamp,
-            dependsOnTimestamps,
-            setupHash,
-          }
-          Cypress.env(dataKey, sessionData)
-
-          if (shareAcrossSpecs) {
-            cy.task('dataSession:save', { key: dataKey, value: sessionData })
-          }
-        }
-        // automatically create an alias
-        cy.wrap(data, { log: false }).as(name)
-      })
-    })
+    cy.then(setup).then(saveData)
   }
 
   if (pluginDisabled) {
@@ -134,10 +140,21 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     })
     .then((value) => {
       // if the value is undefined or null,
-      // we need to re-run the setup commands
+      // try generating it using the "init" callback
       if (Cypress._.isNil(value)) {
-        cy.log(`first time for session **${name}**`)
-        return setupAndSaveData()
+        if (!Cypress._.isFunction(init)) {
+          throw new Error('dataSession: init must be a function')
+        }
+        return cy.then(init).then((initValue) => {
+          if (Cypress._.isNil(initValue)) {
+            // we need to re-run the setup commands
+            cy.log(`first time for session **${name}**`)
+            return setupAndSaveData()
+          } else {
+            cy.log(`data **${name}** will use the init value`)
+            return saveData(initValue)
+          }
+        })
       }
 
       return sha256(setupSource).then((setupHash) => {
