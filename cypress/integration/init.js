@@ -29,6 +29,29 @@ describe('init', () => {
     })
   })
 
+  it('does not call init if the value is present', () => {
+    // puts the value into the data session
+    Cypress.setDataSession(name, 'bar')
+
+    const init = cy.stub().as('init')
+    const setup = cy.stub().as('setup').returns(42)
+    const validate = cy.stub().as('validate').returns(true)
+
+    // we have already put our value into the data session
+    cy.dataSession({
+      name,
+      setup,
+      validate,
+      init,
+    }).then((value) => {
+      // the value is whatever we put into the data session
+      expect(value, 'data value').to.equal('bar')
+      expect(validate).to.be.calledOnce
+      expect(init).to.not.to.be.called
+      expect(setup).to.not.to.be.called
+    })
+  })
+
   it('calls init', () => {
     const init = cy.stub().as('init').returns('foo')
     const setup = cy.stub().as('setup').returns(42)
