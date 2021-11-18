@@ -151,8 +151,17 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
             cy.log(`first time for session **${name}**`)
             return setupAndSaveData()
           } else {
-            cy.log(`data **${name}** will use the init value`)
-            return saveData(initValue)
+            return cy
+              .then(() => validate(initValue))
+              .then((valid) => {
+                if (valid) {
+                  cy.log(`data **${name}** will use the init value`)
+                  return saveData(initValue)
+                } else {
+                  cy.log(`data **${name}** init did not pass validation`)
+                  return setupAndSaveData()
+                }
+              })
           }
         })
       }

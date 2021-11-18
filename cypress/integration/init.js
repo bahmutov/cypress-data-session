@@ -66,9 +66,12 @@ describe('init', () => {
       expect(value, 'data value').to.equal('foo')
       // calls "init" because there is not value in the data session yet
       expect(init).to.be.calledOnce
-      // we are not calling "validate" for init result
-      expect(validate).not.to.be.called
+      // the "validate" function was called with the value yielded by the "init"
+      expect(validate).to.be.calledOnceWith('foo')
       expect(setup).not.to.be.called
+
+      // make sure the order is correct
+      expect(init).to.be.calledBefore(validate)
 
       init.resetHistory()
       validate.resetHistory()
@@ -90,6 +93,32 @@ describe('init', () => {
 
       init.resetHistory()
       validate.resetHistory()
+    })
+  })
+
+  it('calls setup if init returns invalid data', () => {
+    const init = cy.stub().as('init').returns('foo')
+    const setup = cy.stub().as('setup').returns(42)
+    const validate = cy.stub().as('validate').returns(false)
+
+    cy.dataSession({
+      name,
+      init,
+      setup,
+      validate,
+    }).then((value) => {
+      expect(value, 'data value from setup').to.equal(42)
+
+      // calls "init" because there is not value in the data session yet
+      expect(init).to.be.calledOnce
+      // the "validate" function was called with the value yielded by the "init"
+      expect(validate).to.be.calledOnceWith('foo')
+      expect(setup).to.be.calledOnce
+
+      // make sure the order is correct
+      // init => validate => setup
+      expect(init).to.be.calledBefore(validate)
+      expect(validate).to.be.calledBefore(setup)
     })
   })
 })

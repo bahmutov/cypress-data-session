@@ -261,7 +261,7 @@ cy.dataSession({
 })
 ```
 
-The above example will find the test user the very first time the command runs, since there is nothing in the data session yet. Then it validates the ID. If there is no ID, it runs the `setup` function to create the test user. If there is a test user, and it returned the ID from the `init` method, then it is cached (as if the `setup` method created it), and the test continues.
+The above example will find the test user (by calling the `cy.task`) the very first time the command runs, since there is nothing in the data session yet. Then it validates the ID. If there is no ID, it runs the `setup` function to create the test user. If there is a test user, and it returned the ID from the `init` method, then it is cached (as if the `setup` method created it), and the test continues.
 
 ## Flow
 
