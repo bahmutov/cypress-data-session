@@ -279,6 +279,29 @@ Consider the `cy.dataSession(options)` where the `options` object might have the
   - if the `validate` returns `true`, the code calls `recreate` method
   - else it has to recompute the value, so it calls `onInvalidated`, `preSetup`, and `setup` methods
 
+### Flowchart
+
+<!--
+Mermaid charts can be previewed using VSCode extension
+Name: Markdown Preview Mermaid Support
+Id: bierner.markdown-mermaid
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid
+-->
+
+```mermaid
+flowchart TD
+  A[Start] --> B{Have cached value?}
+  B --> |No cached value| C[calls init]
+  C --> |init result| D{calls validate}
+  D --> |validated| J[recreate]
+  J --> E[Save the value]
+  E --> F[Finish]
+  D --> |Not validated| H[onInvalidated]
+  H --> G[preSetup & setup]
+  G --> E
+  B --> |With cached value| D
+```
+
 ## Examples
 
 - [bahmutov/chat.io](https://github.com/bahmutov/chat.io)
