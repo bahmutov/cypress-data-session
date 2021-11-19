@@ -288,6 +288,10 @@ Id: bierner.markdown-mermaid
 VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid
 -->
 
+![Flowchart](images/flowchart.png)
+<details>
+  <summary>Flowchart source</summary>
+
 ```mermaid
 flowchart TD
   A[Start] --> B{Have cached value?}
@@ -301,6 +305,7 @@ flowchart TD
   G --> E
   B --> |With cached value| D
 ```
+</details>
 
 ## Examples
 
