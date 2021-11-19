@@ -156,7 +156,15 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
               .then((valid) => {
                 if (valid) {
                   cy.log(`data **${name}** will use the init value`)
-                  return saveData(initValue)
+
+                  if (Cypress._.isFunction(recreate)) {
+                    cy.log(`recreating **${name}**`)
+                    return cy
+                      .then(() => recreate(initValue))
+                      .then(() => saveData(initValue))
+                  } else {
+                    return saveData(initValue)
+                  }
                 } else {
                   cy.log(`data **${name}** init did not pass validation`)
                   return setupAndSaveData()

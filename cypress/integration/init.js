@@ -121,4 +121,33 @@ describe('init', () => {
       expect(validate).to.be.calledBefore(setup)
     })
   })
+
+  it('calls recreate if init returns valid data', () => {
+    const init = cy.stub().as('init').returns('foo')
+    const setup = cy.stub().as('setup').returns(42)
+    const recreate = cy.stub().as('recreate')
+    const validate = cy.stub().as('validate').returns(true)
+
+    cy.dataSession({
+      name,
+      init,
+      setup,
+      recreate,
+      validate,
+    }).then((value) => {
+      expect(value, 'data value from init').to.equal('foo')
+
+      // calls "init" because there is not value in the data session yet
+      expect(init).to.be.calledOnce
+      // the "validate" function was called with the value yielded by the "init"
+      expect(validate).to.be.calledOnceWith('foo')
+      expect(setup).to.not.be.called
+      expect(recreate).to.be.calledOnceWith('foo')
+
+      // make sure the order is correct
+      // init => validate => recreate
+      expect(init).to.be.calledBefore(validate)
+      expect(validate).to.be.calledBefore(recreate)
+    })
+  })
 })
