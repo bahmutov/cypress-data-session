@@ -1,4 +1,5 @@
 # https://github.com/nielsvaneck/render-md-mermaid
+# https://nielsvaneck.com/post/2021-01-31-render-md-mermaid-a-github-action/
 name: render-charts
 
 # only re-render Mermaid charts

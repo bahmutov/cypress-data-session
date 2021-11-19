@@ -294,9 +294,9 @@ VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=bierner
 
 ```mermaid
 flowchart TD
-  A[Start] --> B{Have cached value?}
+  A[Start] --> B{Have\ncached\nvalue?}
   B --> |No cached value| C[calls init]
-  C --> |init result| D{calls validate}
+  C --> |init result| D{calls\nvalidate}
   D --> |validated| J[recreate]
   J --> E[Save the value]
   E --> F[Finish]
