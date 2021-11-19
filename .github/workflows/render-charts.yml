@@ -1,0 +1,31 @@
+# https://github.com/nielsvaneck/render-md-mermaid
+name: render-charts
+
+# only re-render Mermaid charts
+# if the README file changes on the main branch
+# or this workflow file changes
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - README.md
+      - .github/workflows/render-charts.yml
+
+jobs:
+  render-md-mermaid:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Render images for every Mermaid diagram in all Markdown files (*.md) in the repo
+        uses: nielsvaneck/render-md-mermaid@v2
+
+      - run: git status
+      # - name: Commit rendered png and svg files
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     file_pattern: '*[.svg,.png]'
+      #     commit_message: automatically rendered mermaid diagrams
