@@ -137,24 +137,35 @@ describe('validate', () => {
       const preSetup = cy.stub().as('preSetup')
       const setup = cy.stub().as('setup').returns('changed')
       const validate = cy.stub().as('validate').returns(false)
+      const onInvalidated = cy.stub().as('onInvalidated')
       const recreate = cy.stub().as('recreate').throws('Nope')
       cy.dataSession({
         name,
         preSetup,
         setup,
         validate,
+        onInvalidated,
         recreate,
       })
         // yields the value from "setup"
         .should('equal', 'changed')
         .then(() => {
           expect(validate, 'validate').to.be.calledOnceWith(42)
+          expect(onInvalidated, 'onInvalidated').to.be.calledOnceWith(42)
           expect(recreate, 'recreate').to.not.be.called
           expect(preSetup, 'preSetup').to.be.calledOnce
           expect(setup, 'setup').to.be.calledOnce
-          expect(validate, 'validate -> preSetup').to.be.calledBefore(preSetup)
-          expect(preSetup, 'preSetup -> setup').to.be.calledBefore(setup)
         })
+
+      cy.log('**order of calls**').then(() => {
+        expect(validate, 'validate -> onInvalidated').to.be.calledBefore(
+          onInvalidated,
+        )
+        expect(onInvalidated, 'onInvalidated -> preSetup').to.be.calledBefore(
+          preSetup,
+        )
+        expect(preSetup, 'preSetup -> setup').to.be.calledBefore(setup)
+      })
     })
   })
 })
