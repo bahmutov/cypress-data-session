@@ -107,4 +107,54 @@ describe('validate', () => {
       })
     })
   })
+
+  context('valid vs invalid with cached data', () => {
+    beforeEach(() => {
+      // put a valid into the cache
+      Cypress.setDataSession(name, 42)
+    })
+
+    it('is valid (blue)', () => {
+      const setup = cy.stub().as('setup').throws('Nope')
+      const validate = cy.stub().as('validate').returns(true)
+      const recreate = cy.stub().as('recreate')
+      cy.dataSession({
+        name,
+        setup,
+        validate,
+        recreate,
+      })
+        // yields the cached value
+        .should('equal', 42)
+        .then(() => {
+          expect(validate, 'validate').to.be.calledOnceWith(42)
+          expect(recreate, 'recreate').to.be.calledOnce
+          expect(validate, 'validate -> recreate').to.be.calledBefore(recreate)
+        })
+    })
+
+    it('is invalid (green)', () => {
+      const preSetup = cy.stub().as('preSetup')
+      const setup = cy.stub().as('setup').returns('changed')
+      const validate = cy.stub().as('validate').returns(false)
+      const recreate = cy.stub().as('recreate').throws('Nope')
+      cy.dataSession({
+        name,
+        preSetup,
+        setup,
+        validate,
+        recreate,
+      })
+        // yields the value from "setup"
+        .should('equal', 'changed')
+        .then(() => {
+          expect(validate, 'validate').to.be.calledOnceWith(42)
+          expect(recreate, 'recreate').to.not.be.called
+          expect(preSetup, 'preSetup').to.be.calledOnce
+          expect(setup, 'setup').to.be.calledOnce
+          expect(validate, 'validate -> preSetup').to.be.calledBefore(preSetup)
+          expect(preSetup, 'preSetup -> setup').to.be.calledBefore(setup)
+        })
+    })
+  })
 })
