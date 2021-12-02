@@ -2,15 +2,19 @@
 
 import '../../src'
 
-describe('setup function changes', () => {
-  const name = 'setup-changes-example'
+describe('HTTP site', { baseUrl: 'http://neverssl.com' }, () => {
+  const name = 'http-site'
+
+  beforeEach(() => {
+    cy.visit('/')
+  })
 
   beforeEach(() => {
     // force starting fresh
     Cypress.clearDataSession(name)
   })
 
-  it('invalidates the session', () => {
+  it('set change invalidates the session', () => {
     const stub1 = cy.stub().as('setup').returns(42)
     const setup = () => stub1()
 
