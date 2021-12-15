@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "test": "cypress run",
+    "test:open": "cypress open",
     "semantic-release": "semantic-release",
     "lint": "tsc --pretty --noEmit --allowJS cypress/**/*.js"
   },
