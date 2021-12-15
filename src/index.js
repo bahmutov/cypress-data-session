@@ -128,14 +128,17 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   cy.log(`dataSession **${name}**`)
 
-  const entry = Cypress.env(dataKey)
+  let entry = Cypress.env(dataKey)
   cy.wrap(entry ? entry.data : undefined, { log: false })
     .then((value) => {
       if (shareAcrossSpecs) {
-        // TODO: save and load save data as Cypress.env does
-        return cy
-          .task('dataSession:load', dataKey)
-          .then((loaded) => (loaded ? loaded.data : undefined))
+        return cy.task('dataSession:load', dataKey).then((loaded) => {
+          if (loaded) {
+            entry = loaded
+            return loaded.data
+          }
+          return undefined
+        })
       }
     })
     .then((value) => {
@@ -200,6 +203,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
          */
         function parentsRecomputed() {
           if (!entry) {
+            console.log('there is no entry')
             return false
           }
           if (!entry.dependsOnTimestamps) {
@@ -219,6 +223,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
           if (valid) {
             const parentSessionsAreTheSame = parentsRecomputed()
             if (!parentSessionsAreTheSame) {
+              console.log('parentSessionsAreTheSame', parentSessionsAreTheSame)
               cy.log(
                 `recomputing **${name}** because a parent session has been recomputed`,
               )
@@ -248,11 +253,14 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 })
 
 Cypress.clearDataSessions = () => {
-  const env = Cypress.env()
-  Cypress._.map(env, (value, key) => {
-    if (isDataSessionKey(key)) {
-      Cypress.clearDataSession(extractKey(key))
-    }
+  // clear any sessions stored in the plugin space
+  return cy.now('task', 'dataSession:clearAll').then(() => {
+    const env = Cypress.env()
+    Cypress._.map(env, (value, key) => {
+      if (isDataSessionKey(key)) {
+        Cypress.clearDataSession(extractKey(key))
+      }
+    })
   })
 }
 // add a simple method to clear data for a specific session
@@ -313,6 +321,12 @@ Cypress.getDataSession = (name) => {
 Cypress.getDataSessionDetails = (name) => {
   const dataKey = formDataKey(name)
   return Cypress.env(dataKey)
+}
+
+Cypress.getSharedDataSessionDetails = (name) => {
+  // gets the value from the plugin side if any
+  const dataKey = formDataKey(name)
+  return cy.now('task', 'dataSession:load', dataKey).then(console.log)
 }
 
 Cypress.setDataSession = (name, data) => {

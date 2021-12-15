@@ -317,11 +317,24 @@ A few global utility methods are added to the `Cypress` object for accessing the
 
 - `Cypress.getDataSession(name)`
 - `Cypress.getDataSessionDetails(name)`
+- `Cypress.getSharedDataSessionDetails(name)`
 - `Cypress.clearDataSession(name)`
 - `Cypress.clearDataSessions()`
 - `Cypress.dataSessions(enable)`
 - `Cypress.setDataSession(name, value)`
 - `Cypress.formDataSessionKey(name)`
+
+### getDataSession
+
+Returns the data for the session with the given name (if any).
+
+### getDataSessionDetails
+
+Returns the session with data and internal details, useful for debugging. If the session is not in memory, but stored in the plugin process, use `getSharedDataSessionDetails`.
+
+### getSharedDataSessionDetails
+
+Fetches the session details from the plugin process.
 
 ### dataSessions
 

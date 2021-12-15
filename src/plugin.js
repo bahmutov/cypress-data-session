@@ -3,6 +3,15 @@ const debug = require('debug')('cypress-data-session')
 function cypressDataSessionPlugin(on, config) {
   const savedValues = {}
 
+  function printDataSessions() {
+    const n = Object.keys(savedValues).length
+    console.log('%d data session(s)', n)
+    Object.keys(savedValues).forEach((key) => {
+      console.log('  %s: %o', key, savedValues[key])
+    })
+    return null
+  }
+
   function deepSave({ key, value }) {
     debug('deepSave', key, value)
 
@@ -39,10 +48,22 @@ function cypressDataSessionPlugin(on, config) {
     return true
   }
 
+  function clearAll() {
+    const n = Object.keys(savedValues).length
+    debug('clearing all %d data sessions', n)
+    Object.keys(savedValues).forEach((key) => {
+      delete savedValues[key]
+    })
+
+    return null
+  }
+
   on('task', {
     'dataSession:save': deepSave,
     'dataSession:load': deepLoad,
     'dataSession:clear': deepClear,
+    'dataSession:clearAll': clearAll,
+    'dataSession:print': printDataSessions,
   })
 
   debug('registered plugin tasks')

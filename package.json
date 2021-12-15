@@ -10,7 +10,8 @@
   "scripts": {
     "test": "cypress run",
     "semantic-release": "semantic-release",
-    "lint": "tsc --pretty --noEmit --allowJS cypress/**/*.js"
+    "lint": "tsc --pretty --noEmit --allowJS cypress/**/*.js",
+    "cy:open": "cypress open"
   },
   "repository": {
     "type": "git",

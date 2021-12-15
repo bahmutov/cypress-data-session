@@ -44,8 +44,9 @@ describe('global session methods', () => {
   it('clears the data sessions', () => {
     const sessions = Cypress.dataSessions()
     expect(sessions).to.have.length.greaterThan(0)
-    Cypress.clearDataSessions()
-    const currentSessions = Cypress.dataSessions()
-    expect(currentSessions).to.deep.equal([])
+    Cypress.clearDataSessions().then(() => {
+      const currentSessions = Cypress.dataSessions()
+      expect(currentSessions).to.deep.equal([])
+    })
   })
 })
