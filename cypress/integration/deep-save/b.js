@@ -1,5 +1,4 @@
 // @ts-check
-
 import '../../../src'
 
 describe('deep save', () => {
