@@ -254,7 +254,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
 Cypress.clearDataSessions = () => {
   // clear any sessions stored in the plugin space
-  cy.now('task', 'dataSession:clearAll').then(() => {
+  return cy.now('task', 'dataSession:clearAll').then(() => {
     const env = Cypress.env()
     Cypress._.map(env, (value, key) => {
       if (isDataSessionKey(key)) {

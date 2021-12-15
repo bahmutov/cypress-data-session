@@ -42,6 +42,7 @@ declare namespace Cypress {
   interface Cypress {
     getDataSession: (name: string) => any
     getDataSessionDetails: (name: string) => any
+    getSharedDataSessionDetails: (name: string) => any
     setDataSession: (name: string, data: any) => void
     /**
      * Clears a particular session by name.
@@ -50,7 +51,7 @@ declare namespace Cypress {
     /**
      * Clears all data sessions from memory.
      */
-    clearDataSessions: () => void
+    clearDataSessions: () => Chainable<void>
     /**
      * Without any arguments lists all current data sessions.
      */
