@@ -2,7 +2,7 @@
 [![ci status][ci image]][ci url] [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-9.1.1-brightgreen)
 > Cypress command for flexible test data setup
 
-Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/)
+Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/) and [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/)
 
 ## Videos
 
