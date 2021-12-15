@@ -1,7 +1,8 @@
+export const SESSION_NAME = 'cache-across-specs'
 export const registerCacheAcrossSpecs = () => {
   Cypress.Commands.add('cacheAcrossSpecs', (cb) => {
     cy.dataSession({
-      name: 'cache-across-specs',
+      name: SESSION_NAME,
       setup: () => {
         cy.log('setting up')
         cb()
