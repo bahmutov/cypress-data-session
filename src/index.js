@@ -297,6 +297,7 @@ Cypress.clearDataSession = (name) => {
     console.warn('Available data sessions: %s', names)
   } else {
     Cypress.env(dataKey, undefined)
+    delete Cypress.env()[dataKey]
   }
   // clears the data from the plugin side
   function clearSharedDataSession() {
