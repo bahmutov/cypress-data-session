@@ -21,14 +21,19 @@ describe('restores session from stored', () => {
           .to.have.property(key)
           .and.to.be.an('object')
           .and.to.have.property('data', 'test value')
-      }).then(() => {
-        // the data session was stored in the plugin
-        Cypress.printSharedDataSessions()
-          .should('not.be.empty')
-          .and('have.property', key)
-          .should('be.an', 'object')
-          .should('have.property', 'data', 'test value')
       })
+        .then(() => {
+          // the data session was stored in the plugin
+          Cypress.printSharedDataSessions()
+            .should('not.be.empty')
+            .and('have.property', key)
+            .should('be.an', 'object')
+            .should('have.property', 'data', 'test value')
+        })
+        .then(() => {
+          // has created an alias
+          cy.get('@test-data').should('equal', 'test value')
+        })
     }
 
     cy.dataSession({

@@ -241,6 +241,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
                 return cy.then(() => recreate(value)).then(returnValue)
               }
 
+              if (!Cypress.env(dataKey)) {
+                Cypress.env(dataKey, entry)
+              }
               return returnValue()
             }
           }
