@@ -9,7 +9,8 @@ function cypressDataSessionPlugin(on, config) {
     Object.keys(savedValues).forEach((key) => {
       console.log('  %s: %o', key, savedValues[key])
     })
-    return null
+
+    return savedValues
   }
 
   function deepSave({ key, value }) {

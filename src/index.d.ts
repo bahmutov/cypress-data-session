@@ -57,5 +57,9 @@ declare namespace Cypress {
      */
     dataSessions: (enable?: boolean) => void
     formDataSessionKey: (name: string) => string
+    /**
+     * Prints data sessions stored in the plugin space.
+     */
+    printSharedDataSessions: () => Chainable<void>
   }
 }

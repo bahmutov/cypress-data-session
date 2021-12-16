@@ -2,6 +2,13 @@
 
 const sha256 = require('./sha')
 
+/**
+ * Returns true if we are currently running a test
+ */
+function isTestRunning() {
+  return !Boolean(Cypress.mocha.getRunner().stopped)
+}
+
 function formDataKey(name) {
   if (!name) {
     throw new Error('Missing name')
@@ -252,6 +259,10 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     })
 })
 
+//
+// Global methods
+//
+
 Cypress.clearDataSessions = () => {
   // clear any sessions stored in the plugin space
   return cy.now('task', 'dataSession:clearAll').then(() => {
@@ -342,6 +353,16 @@ Cypress.setDataSession = (name, data) => {
 
   const sessionData = { data, timestamp, dependsOnTimestamps }
   Cypress.env(dataKey, sessionData)
+}
+
+/**
+ * Prints data sessions stored in the plugin space
+ */
+Cypress.printSharedDataSessions = () => {
+  if (isTestRunning()) {
+    return cy.task('dataSession:print')
+  }
+  return cy.now('task', 'dataSession:print')
 }
 
 Cypress.formDataSessionKey = formDataKey

@@ -1,5 +1,7 @@
 # cypress-data-session
+
 [![ci status][ci image]][ci url] [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-9.1.1-brightgreen)
+
 > Cypress command for flexible test data setup
 
 Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/) and [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/)
@@ -189,19 +191,19 @@ Sometimes you might need to run a few steps before the `setup` commands. While y
 ```js
 cy.dataSession({
   name: 'user',
-  preSetup () {
+  preSetup() {
     cy.task('findUser', 'Joe').then((user) => {
       if (user) {
         cy.task('deleteUser', user._id)
       }
     })
   },
-  setup () {
+  setup() {
     // create the user "Joe"
   },
-  validate (saved) {
+  validate(saved) {
     // check if the user "Joe" exists
-  }
+  },
 })
 ```
 
@@ -212,19 +214,19 @@ A data session can depend on another data session or even multiple data sessions
 ```js
 cy.dataSession({
   name: 'created user',
-  setup () {
+  setup() {
     // create a user
-  }
+  },
 })
 
 cy.dataSession({
   name: 'logged in user',
   dependsOn: 'created user',
-  setup () {
+  setup() {
     // take the user object from
     // the data session "created user"
     // and log in
-  }
+  },
 })
 ```
 
@@ -243,10 +245,10 @@ Sometimes the data is generated, but sometimes we want to first see if we can lo
 ```js
 cy.dataSession({
   name: 'test user',
-  setup () {
+  setup() {
     cy.task('createUser') // yields the user ID
   },
-  validate: Cypress._.isString
+  validate: Cypress._.isString,
 })
 ```
 
@@ -289,6 +291,7 @@ VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=bierner
 -->
 
 ![Flowchart](images/flowchart.png)
+
 <details>
   <summary>Flowchart source</summary>
 
@@ -305,6 +308,7 @@ flowchart TD
   G --> E
   B --> |With cached value| D
 ```
+
 </details>
 
 ## Examples
@@ -323,6 +327,7 @@ A few global utility methods are added to the `Cypress` object for accessing the
 - `Cypress.dataSessions(enable)`
 - `Cypress.setDataSession(name, value)`
 - `Cypress.formDataSessionKey(name)`
+- `Cypress.printSharedDataSessions`
 
 ### getDataSession
 
