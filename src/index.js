@@ -265,7 +265,15 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
 Cypress.clearDataSessions = () => {
   // clear any sessions stored in the plugin space
-  return cy.now('task', 'dataSession:clearAll').then(() => {
+  function clearSharedSessions() {
+    if (isTestRunning()) {
+      return cy.task('dataSession:clearAll')
+    } else {
+      return cy.now('task', 'dataSession:clearAll')
+    }
+  }
+
+  return clearSharedSessions().then(() => {
     const env = Cypress.env()
     Cypress._.map(env, (value, key) => {
       if (isDataSessionKey(key)) {
@@ -287,8 +295,16 @@ Cypress.clearDataSession = (name) => {
   } else {
     Cypress.env(dataKey, undefined)
   }
-  // clear the data from the plugin side
-  cy.now('task', 'dataSession:clear', dataKey).then((cleared) => {
+  // clears the data from the plugin side
+  function clearSharedDataSession() {
+    if (isTestRunning()) {
+      return cy.task('dataSession:clear', dataKey)
+    } else {
+      return cy.now('task', 'dataSession:clear', dataKey)
+    }
+  }
+
+  return clearSharedDataSession().then((cleared) => {
     if (cleared) {
       console.log('cleared data session "%s"', name)
     } else {
@@ -337,7 +353,11 @@ Cypress.getDataSessionDetails = (name) => {
 Cypress.getSharedDataSessionDetails = (name) => {
   // gets the value from the plugin side if any
   const dataKey = formDataKey(name)
-  return cy.now('task', 'dataSession:load', dataKey).then(console.log)
+  if (isTestRunning()) {
+    return cy.task('dataSession:load', dataKey).then(console.log)
+  } else {
+    return cy.now('task', 'dataSession:load', dataKey).then(console.log)
+  }
 }
 
 Cypress.setDataSession = (name, data) => {
