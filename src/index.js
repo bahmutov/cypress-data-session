@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+const debug = require('debug')('cypress-data-session')
 const sha256 = require('./sha')
 
 /**
@@ -210,7 +211,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
          */
         function parentsRecomputed() {
           if (!entry) {
-            console.log('there is no entry')
+            debug('there is no entry for name "%s"', name)
             return false
           }
           if (!entry.dependsOnTimestamps) {
@@ -230,7 +231,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
           if (valid) {
             const parentSessionsAreTheSame = parentsRecomputed()
             if (!parentSessionsAreTheSame) {
-              console.log('parentSessionsAreTheSame', parentSessionsAreTheSame)
+              debug('parentSessionsAreTheSame', parentSessionsAreTheSame)
               cy.log(
                 `recomputing **${name}** because a parent session has been recomputed`,
               )
