@@ -53,8 +53,18 @@ describe('global session methods', () => {
   context('clearDataSession', () => {
     it('removes the alias', function () {
       expect(this.C, 'has an alias at the start').to.equal('c')
+      Cypress.clearDataSession('C').then(function () {
+        expect(this.C, 'has no alias after clear').to.be.undefined
+      })
+    })
+
+    it('is part of the chain if called from a test', function () {
+      expect(this.C, 'has an alias').to.equal('c')
+      cy.wait(100).then(() => {
+        // clearDataSession should not have cleared this alias yet!
+        expect(this.C, 'has an alias after wait').to.equal('c')
+      })
       Cypress.clearDataSession('C')
-      expect(this.C, 'has no alias after clear').to.be.undefined
     })
   })
 })

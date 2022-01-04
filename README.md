@@ -351,15 +351,13 @@ Clears all current data sessions from memory.
 
 ### clearDataSession
 
-Clears the given data session from memory, from aliases, and from the plugin space (if shared). Should be used inside `.then` callback or in a hook, since it executes immediately. Can be used from the DevTools console
+Clears the given data session from memory, from aliases, and from the plugin space (if shared). If running inside a test, automatically runs inside `cy.then` to be part of the command chain. Can be used from the DevTools console
 
 ```js
 cy.dataSession('user', ...)
 // rest of cy commands
-cy.then(() => {
-  // remove the data session "user"
-  Cypress.clearDataSession('user')
-})
+// remove the data session "user"
+Cypress.clearDataSession('user')
 ```
 
 ## Debugging

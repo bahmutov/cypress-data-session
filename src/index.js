@@ -291,6 +291,7 @@ Cypress.clearDataSessions = () => {
 }
 // add a simple method to clear data for a specific session
 Cypress.clearDataSession = (name) => {
+  const insideTest = isTestRunning()
   const dataKey = formDataKey(name)
   if (!(dataKey in Cypress.env())) {
     console.warn('Could not find data session under name "%s"', name)
@@ -305,7 +306,7 @@ Cypress.clearDataSession = (name) => {
   }
   // clears the data from the plugin side
   function clearSharedDataSession() {
-    if (isTestRunning()) {
+    if (insideTest) {
       // delete the alias
       const context = Object.getPrototypeOf(cy.state('ctx'))
       delete context[name]
@@ -315,13 +316,19 @@ Cypress.clearDataSession = (name) => {
     }
   }
 
-  return clearSharedDataSession().then((cleared) => {
+  function logCleared(cleared) {
     if (cleared) {
       console.log('cleared data session "%s"', name)
     } else {
       console.warn('could not find saved data session for name "%s"', name)
     }
-  })
+  }
+
+  if (insideTest) {
+    return cy.then(clearSharedDataSession).then(logCleared)
+  }
+
+  return clearSharedDataSession().then(logCleared)
 }
 
 // enable or disable data sessions

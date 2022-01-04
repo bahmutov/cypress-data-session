@@ -40,6 +40,10 @@ describe('Restores data session', () => {
 
     // both the parent and the child setup should be called just once
     cy.get('@parentSetup').should('be.calledOnce')
+    // the parent session should be restored in memory
+    // with the original timestamps, thus the child session
+    // should not be recomputed
+    // https://github.com/bahmutov/cypress-data-session/issues/43
     // cy.get('@childSetup').should('be.calledOnce')
   })
 })

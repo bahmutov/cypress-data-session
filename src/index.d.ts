@@ -96,9 +96,11 @@ declare namespace Cypress {
      */
     setDataSession: (name: string, data: any) => void
     /**
-     * Clears a particular session by name.
+     * Clears a particular session by name. If running inside a test
+     * uses `cy.then` to clear the session after the previous command
+     * in the chain.
      */
-    clearDataSession: (name: string) => void
+    clearDataSession: (name: string) => Chainable<void>
     /**
      * Clears all data sessions from memory.
      */
