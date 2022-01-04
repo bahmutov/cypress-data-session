@@ -325,7 +325,10 @@ Cypress.clearDataSession = (name) => {
   }
 
   if (insideTest) {
-    return cy.then(clearSharedDataSession).then(logCleared)
+    return cy
+      .log(`clear data session **${name}**`)
+      .then(clearSharedDataSession)
+      .then(logCleared)
   }
 
   return clearSharedDataSession().then(logCleared)
