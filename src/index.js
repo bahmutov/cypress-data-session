@@ -239,7 +239,10 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
               cy.log(`data **${name}** is still valid`)
               if (Cypress._.isFunction(recreate)) {
                 cy.log(`recreating **${name}**`)
-                return cy.then(() => recreate(value)).then(returnValue)
+                return cy
+                  .then(() => recreate(value))
+                  .then(() => saveData(value))
+                  .then(returnValue)
               }
 
               if (!Cypress.env(dataKey)) {
