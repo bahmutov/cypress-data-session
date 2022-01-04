@@ -49,4 +49,12 @@ describe('global session methods', () => {
       expect(currentSessions).to.deep.equal([])
     })
   })
+
+  context('clearDataSession', () => {
+    it('removes the alias', function () {
+      expect(this.C, 'has an alias at the start').to.equal('c')
+      Cypress.clearDataSession('C')
+      expect(this.C, 'has no alias after clear').to.be.undefined
+    })
+  })
 })

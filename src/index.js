@@ -306,6 +306,9 @@ Cypress.clearDataSession = (name) => {
   // clears the data from the plugin side
   function clearSharedDataSession() {
     if (isTestRunning()) {
+      // delete the alias
+      const context = Object.getPrototypeOf(cy.state('ctx'))
+      delete context[name]
       return cy.task('dataSession:clear', dataKey)
     } else {
       return cy.now('task', 'dataSession:clear', dataKey)

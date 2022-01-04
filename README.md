@@ -349,6 +349,19 @@ Without any arguments, this static method lists all current data sessions.
 
 Clears all current data sessions from memory.
 
+### clearDataSession
+
+Clears the given data session from memory, from aliases, and from the plugin space (if shared). Should be used inside `.then` callback or in a hook, since it executes immediately. Can be used from the DevTools console
+
+```js
+cy.dataSession('user', ...)
+// rest of cy commands
+cy.then(() => {
+  // remove the data session "user"
+  Cypress.clearDataSession('user')
+})
+```
+
 ## Debugging
 
 This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them. How to set an environment variable depends on the operating system. From a Linux terminal we can use
