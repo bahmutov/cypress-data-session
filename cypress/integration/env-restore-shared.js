@@ -28,8 +28,26 @@ describe('Restores data session', () => {
 
     const key = Cypress.formDataSessionKey('parent')
 
-    cy.dataSession(parentOptions)
+    let parentComputedAt
+    cy.dataSession(parentOptions).then(() => {
+      const parentDataSession = Cypress.getDataSessionDetails('parent')
+      expect(parentDataSession, 'parent has timestamp').to.have.property(
+        'timestamp',
+      )
+      parentComputedAt = parentDataSession.timestamp
+      expect(parentComputedAt, 'parent timestamp').to.be.greaterThan(1)
+    })
     cy.dataSession(childOptions)
+      .then(() => {
+        const childDataSession = Cypress.getDataSessionDetails('child')
+        expect(childDataSession, 'child has parent timestamp').to.have.property(
+          'dependsOnTimestamps',
+        )
+        const childParentComputedAt = childDataSession.dependsOnTimestamps[0]
+        expect(childParentComputedAt, 'timestamps match').to.equal(
+          parentComputedAt,
+        )
+      })
       .then(() => {
         delete Cypress.env()[key]
       })
@@ -40,10 +58,24 @@ describe('Restores data session', () => {
 
     // both the parent and the child setup should be called just once
     cy.get('@parentSetup').should('be.calledOnce')
+    cy.get('@parentRecreate').should('be.calledOnce')
+
     // the parent session should be restored in memory
     // with the original timestamps, thus the child session
     // should not be recomputed
     // https://github.com/bahmutov/cypress-data-session/issues/43
-    // cy.get('@childSetup').should('be.calledOnce')
+
+    cy.then(() => {
+      const childDataSession = Cypress.getDataSessionDetails('child')
+      expect(childDataSession, 'child has parent timestamp').to.have.property(
+        'dependsOnTimestamps',
+      )
+      const childParentComputedAt = childDataSession.dependsOnTimestamps[0]
+      expect(childParentComputedAt, 'timestamps match').to.equal(
+        parentComputedAt,
+      )
+    })
+    // and the child session should not be recomputed
+    cy.get('@childSetup').should('be.calledOnce')
   })
 })

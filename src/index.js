@@ -169,10 +169,10 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
                   cy.log(`data **${name}** will use the init value`)
 
                   if (Cypress._.isFunction(recreate)) {
-                    cy.log(`recreating **${name}**`)
+                    cy.log(`recreating the **${name}**`)
                     return cy
                       .then(() => recreate(initValue))
-                      .then(() => saveData(initValue))
+                      .then(() => saveData(initValue, entry))
                   } else {
                     return saveData(initValue)
                   }
@@ -241,7 +241,11 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
                 cy.log(`recreating **${name}**`)
                 return cy
                   .then(() => recreate(value))
-                  .then(() => saveData(value))
+                  .then(() => {
+                    Cypress.env(dataKey, entry)
+                    // automatically create an alias
+                    cy.wrap(value, { log: false }).as(name)
+                  })
                   .then(returnValue)
               }
 
