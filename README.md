@@ -8,14 +8,14 @@ Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahm
 
 ## Videos
 
-- [Introduction to cypress-data-session package](https://youtu.be/As5yqkoZOx8)
+- [Introduction to cypress-data-session package](https://youtu.be/As5yqkoZOx8) for creating two chat rooms in the chat application
 - [Use Data Alias Created Automatically By cypress-data-session](https://youtu.be/VQtjDGCuRzI)
 - [Create User Using cypress-data-session Command](https://youtu.be/P-sb5OHSNsM)
 - [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc)
 - [Share Data Across Specs Using cypress-data-session Plugin](https://youtu.be/ws4TitQJ7fQ)
 - [Use cy.dataSession To Create A User And Log In](https://youtu.be/PTlcRBgFJaM)
 - [Quickly Create A User And Log in Using Dependent Data Sessions](https://www.youtube.com/watch?v=0KTGc83wSoA)
-- [Introduction To cypress-data-session Plugin](https://youtu.be/7ipCvJQixI0)
+- [Introduction To cypress-data-session Plugin](https://youtu.be/7ipCvJQixI0) for setting up 3 todo items in a TodoMVC app
 
 ## Install
 
