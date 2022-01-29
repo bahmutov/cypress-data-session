@@ -360,6 +360,42 @@ cy.dataSession('user', ...)
 Cypress.clearDataSession('user')
 ```
 
+## Migration
+
+### from v1 to v2
+
+The default value for the `validate` option changed from `false` to `true`, meaning any non-nil value is valid and does not require to be recomputed.
+
+```js
+// v1
+cy.dataSession(name, setup, true)
+// v2
+cy.dataSession(name, setup)
+```
+
+Same for the option form
+
+```js
+// v1
+cy.dataSession({
+  name,
+  setup,
+  validate: true,
+})
+// v2
+cy.dataSession({
+  name,
+  setup,
+})
+```
+
+If you previously set `validate` to false, keep it the same
+
+```js
+// v1, v2
+cy.dataSession(name, setup, false)
+```
+
 ## Debugging
 
 This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them. How to set an environment variable depends on the operating system. From a Linux terminal we can use

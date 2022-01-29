@@ -13,6 +13,8 @@ describe('Dependent data session across specs', () => {
       name: 'parent',
       setup: cy.stub().as('parentSetup').returns(1),
       shareAcrossSpecs: true,
+      // recompute the parent session every time
+      validate: false,
     }
     cy.dataSession(parentOptions)
 

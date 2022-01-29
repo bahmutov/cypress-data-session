@@ -10,28 +10,54 @@ describe('validate', () => {
     Cypress.clearDataSession(name)
   })
 
-  it('without validate calls the setup every time', () => {
+  it('by default non-nil value is ok and does not need to be recomputed', () => {
     const setup = cy.stub().as('setup').returns(42)
 
     cy.dataSession(name, setup).then(function (value) {
       expect(value, 'yielded').to.equal(42)
       expect(this[name], 'aliased').to.equal(42)
       expect(this.setup).to.be.calledOnce
+      this.setup.resetHistory()
+    })
+
+    // on the next invocation, the setup is NOT called
+    cy.dataSession(name, setup).then(function (value) {
+      expect(value).to.equal(42)
+      expect(this.setup).to.not.be.called
+      // but if we change it to null, then the setup will need to run
+      Cypress.setDataSession(name, null, true)
+    })
+
+    cy.dataSession(name, setup).then(function (value) {
+      // the setup was called, since the value was null
+      expect(value).to.equal(42)
+      expect(this.setup).to.be.calledOnce
+    })
+  })
+
+  it('with validate: false calls the setup every time', () => {
+    const setup = cy.stub().as('setup').returns(42)
+
+    cy.dataSession(name, setup, false).then(function (value) {
+      expect(value, 'yielded').to.equal(42)
+      expect(this[name], 'aliased').to.equal(42)
+      expect(this.setup).to.be.calledOnce
     })
 
     // on the next invocation, the setup is called again
-    cy.dataSession(name, setup).then(function (value) {
+    cy.dataSession(name, setup, false).then(function (value) {
       expect(value).to.equal(42)
       expect(this.setup).to.be.calledTwice
     })
   })
 
-  it('without validate calls the setup every time (option)', () => {
+  it('with validate set to false calls the setup every time (option)', () => {
     const setup = cy.stub().as('setup').returns(42)
 
     cy.dataSession({
       name,
       setup,
+      validate: false,
     }).then(function (value) {
       expect(value, 'yielded').to.equal(42)
       expect(this[name], 'aliased').to.equal(42)
@@ -42,6 +68,7 @@ describe('validate', () => {
     cy.dataSession({
       name,
       setup,
+      validate: false,
     }).then(function (value) {
       expect(value).to.equal(42)
       expect(this.setup).to.be.calledTwice
