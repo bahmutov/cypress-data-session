@@ -13,6 +13,8 @@ describe('Dependent data session', () => {
     const parentOptions = {
       name: 'parent',
       setup: cy.stub().as('parentSetup').returns(1),
+      // recompute the parent session every time
+      validate: false,
     }
     cy.dataSession(parentOptions)
 

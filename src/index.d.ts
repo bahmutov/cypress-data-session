@@ -94,7 +94,7 @@ declare namespace Cypress {
     /**
      * Overwrites the data stored in the given data session
      */
-    setDataSession: (name: string, data: any) => void
+    setDataSession: (name: string, data: any, skipValueCheck?: boolean) => void
     /**
      * Clears a particular session by name. If running inside a test
      * uses `cy.then` to clear the session after the previous command

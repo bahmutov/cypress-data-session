@@ -63,15 +63,22 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
     dependsOn = []
   }
 
-  if (!validate) {
-    // if the user has not provided a validate function
-    // or provided boolean value false,
-    // then assume we need to recompute the data every time
+  if (typeof validate === 'undefined') {
+    // the user did not specify the validate function
+    // thus we will use any non-nil value
+    validate = () => true
+  } else if (validate === false) {
+    // if the user explicitly set the validate to false,
+    // recompute the data every time
     validate = () => false
+  } else if (validate === true) {
+    // if the user explicitly set the validate to true,
+    // any non-nil value is valid
+    validate = () => true
   } else {
-    if (validate === true) {
-      // the user says the data is fine, no need to recompute
-      validate = () => true
+    // otherwise, we expect the user to pass in a function
+    if (typeof validate !== 'function') {
+      throw new Error('validate must be a function')
     }
   }
 
@@ -385,11 +392,11 @@ Cypress.getSharedDataSessionDetails = (name) => {
   }
 }
 
-Cypress.setDataSession = (name, data) => {
-  if (Cypress._.isNil(data)) {
-    throw new Error(
-      `Cannot set data session "${name}" to undefined or undefined`,
-    )
+Cypress.setDataSession = (name, data, skipValueCheck) => {
+  if (!skipValueCheck) {
+    if (Cypress._.isNil(data)) {
+      throw new Error(`Cannot set data session "${name}" to undefined or null`)
+    }
   }
 
   const dataKey = formDataKey(name)
