@@ -4,7 +4,7 @@
 
 > Cypress command for flexible test data setup
 
-Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/) and [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/)
+Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/) and [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/). Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io Tests](https://slides.com/bahmutov/data-for-e2e-tests).
 
 ## Videos
 
