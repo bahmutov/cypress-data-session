@@ -31,7 +31,7 @@
     "cypress": "9.7.0",
     "prettier": "2.6.2",
     "semantic-release": "19.0.2",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   },
   "dependencies": {
     "debug": "^4.3.2",
