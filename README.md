@@ -398,11 +398,23 @@ cy.dataSession(name, setup, false)
 
 ## Debugging
 
-This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see them. How to set an environment variable depends on the operating system. From a Linux terminal we can use
+This plugin uses [debug](https://github.com/visionmedia/debug#readme) module to output verbose messages. Start Cypress with the environment variable `DEBUG=cypress-data-session` to see the messages in the terminal. From a Linux terminal we can use:
 
 ```shell
 $ DEBUG=cypress-data-session npx cypress open
 ```
+
+**Tip:** read how to set the system environment variables on different operating systems [here](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html)
+
+To see the verbose log messages in the Cypress browser, open the DevTools and in the top window context set the local storage property
+
+```js
+localStorage.debug = 'cypress-data-session'
+```
+
+Make sure the "verbose" logs are visible. Then you should see the debug logs while the plugin executes its code in the browser, just like this image shows:
+
+![Showing the debug logs in the browser](./images/debug-logs.png)
 
 ## See also
 

@@ -119,8 +119,10 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
           setupHash,
         }
         Cypress.env(dataKey, sessionData)
+        debug('set the data session %s to %o', dataKey, sessionData)
 
         if (shareAcrossSpecs) {
+          debug('sharing the session %s across specs', dataKey)
           cy.task('dataSession:save', { key: dataKey, value: sessionData })
         }
       }
@@ -250,6 +252,12 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
                   .then(() => recreate(value))
                   .then(() => {
                     Cypress.env(dataKey, entry)
+                    debug(
+                      'setting data session %s to %o and creating alias %s',
+                      dataKey,
+                      entry,
+                      name,
+                    )
                     // automatically create an alias
                     cy.wrap(value, { log: false }).as(name)
                   })
@@ -257,6 +265,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
               }
 
               if (!Cypress.env(dataKey)) {
+                debug('Setting key %s to %o', dataKey, entry)
                 Cypress.env(dataKey, entry)
               }
               return returnValue()
@@ -302,6 +311,11 @@ Cypress.clearDataSessions = () => {
 }
 // add a simple method to clear data for a specific session
 Cypress.clearDataSession = (name) => {
+  debug('clearing data session "%s"', name)
+  if (!name) {
+    throw new Error('Expected a data session name to clear')
+  }
+
   const insideTest = isTestRunning()
   const dataKey = formDataKey(name)
   if (!(dataKey in Cypress.env())) {
@@ -314,6 +328,7 @@ Cypress.clearDataSession = (name) => {
   } else {
     Cypress.env(dataKey, undefined)
     delete Cypress.env()[dataKey]
+    debug('deleted data session key %s', dataKey)
   }
   // clears the data from the plugin side
   function clearSharedDataSession() {
@@ -366,6 +381,7 @@ Cypress.dataSessions = (enable) => {
     throw new Error('dataSessions argument must be a boolean or undefined')
   }
   Cypress.env('dataSessions', Boolean(enable))
+  debug('set data sessions enabled? %o', Boolean(enable))
 }
 
 Cypress.getDataSession = (name) => {
@@ -405,6 +421,7 @@ Cypress.setDataSession = (name, data, skipValueCheck) => {
 
   const sessionData = { data, timestamp, dependsOnTimestamps }
   Cypress.env(dataKey, sessionData)
+  debug('set the data session %s to %o', name, sessionData)
 }
 
 /**
