@@ -34,6 +34,23 @@ import 'cypress-data-session'
 
 If you plan to use the [shareAcrossSpecs](#shareacrossspecs) option, you need to load this plugin from your plugin file
 
+### v10
+
+```js
+// cypress.config.js
+import { defineConfig } from 'cypress'
+
+export default defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      require('cypress-data-session/src/plugin')(on, config)
+    },
+  },
+})
+```
+
+### v9
+
 ```js
 // cypress/plugin/index.js
 module.exports = (on, config) => {
