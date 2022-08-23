@@ -18,6 +18,7 @@ beforeEach(() => {
     setup() {
       return 'a'
     },
+    shareAcrossSpecs: true,
   })
 
   cy.dataSession({
@@ -25,6 +26,15 @@ beforeEach(() => {
     setup() {
       return 'b'
     },
+    shareAcrossSpecs: true,
+  })
+
+  cy.dataSession({
+    name: 'C',
+    setup() {
+      return 'c'
+    },
+    shareAcrossSpecs: true,
   })
 })
 

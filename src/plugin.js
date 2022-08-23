@@ -31,12 +31,15 @@ function cypressDataSessionPlugin(on, config) {
       throw new Error(`key must be a string, was ${typeof key}`)
     }
     const value = savedValues[key]
-    debug('%s: %o', key, value)
+    debug('%s: value is %o', key, value)
 
     return value || null
   }
 
   function deepClear(key) {
+    if (typeof key !== 'string') {
+      throw new Error('Expected a string key')
+    }
     debug('deepClear', key)
     debug('existing keys: %o', Object.keys(savedValues))
 
@@ -45,6 +48,7 @@ function cypressDataSessionPlugin(on, config) {
       return false
     }
     delete savedValues[key]
+    debug('removed key "%s", remaining keys: %o', key, Object.keys(savedValues))
 
     return true
   }
