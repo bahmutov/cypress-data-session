@@ -56,6 +56,11 @@ declare namespace Cypress {
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)
 
+  interface DataSession {
+    name: string
+    value: unknown
+  }
+
   interface Chainable {
     /**
      * Initialize and cache the data session.
@@ -108,7 +113,7 @@ declare namespace Cypress {
     /**
      * Without any arguments lists all current data sessions.
      */
-    dataSessions: (enable?: boolean) => void
+    dataSessions: (enable?: boolean) => void | DataSession[]
     formDataSessionKey: (name: string) => string
     /**
      * Prints data sessions stored in the plugin space.
