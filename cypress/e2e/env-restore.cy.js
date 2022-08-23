@@ -1,13 +1,17 @@
 // @ts-check
 
 import '../../src'
+import {
+  getPluginConfigValues,
+  removePluginConfigValue,
+} from 'cypress-plugin-config'
 
 describe('Restores data session', () => {
   beforeEach(() => {
     Cypress.clearDataSession('parent')
   })
 
-  it('sets the session in Cypress.env', function () {
+  it('sets the session in its own data storage', function () {
     /** @type Cypress.DataSessionOptions */
     const parentOptions = {
       name: 'parent',
@@ -18,16 +22,16 @@ describe('Restores data session', () => {
     const key = Cypress.formDataSessionKey('parent')
     cy.dataSession(parentOptions)
       .then(() => {
-        expect(Cypress.env()).to.have.property(key)
+        expect(getPluginConfigValues()).to.have.property(key)
 
         cy.log('removing data session from env')
-        delete Cypress.env()[key]
+        removePluginConfigValue(key)
       })
       .then(() => {
-        expect(Cypress.env()).to.not.have.property(key)
+        expect(getPluginConfigValues()).to.not.have.property(key)
 
         cy.dataSession(parentOptions).then(() => {
-          expect(Cypress.env()).to.have.property(key)
+          expect(getPluginConfigValues()).to.have.property(key)
         })
       })
   })

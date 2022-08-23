@@ -2,6 +2,12 @@
 
 const debug = require('debug')('cypress-data-session')
 const sha256 = require('./sha')
+const {
+  getPluginConfigValue,
+  setPluginConfigValue,
+  getPluginConfigValues,
+  removePluginConfigValue,
+} = require('cypress-plugin-config')
 
 /**
  * Returns true if we are currently running a test
@@ -118,7 +124,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
           dependsOnTimestamps,
           setupHash,
         }
-        Cypress.env(dataKey, sessionData)
+        setPluginConfigValue(dataKey, sessionData)
         debug('set the data session %s to %o', dataKey, sessionData)
 
         if (shareAcrossSpecs) {
@@ -145,7 +151,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
 
   cy.log(`dataSession **${name}**`)
 
-  let entry = Cypress.env(dataKey)
+  let entry = getPluginConfigValue(dataKey)
   cy.wrap(entry ? entry.data : undefined, { log: false })
     .then((value) => {
       if (shareAcrossSpecs) {
@@ -251,7 +257,7 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
                 return cy
                   .then(() => recreate(value))
                   .then(() => {
-                    Cypress.env(dataKey, entry)
+                    setPluginConfigValue(dataKey, entry)
                     debug(
                       'setting data session %s to %o and creating alias %s',
                       dataKey,
@@ -264,9 +270,9 @@ Cypress.Commands.add('dataSession', (name, setup, validate, onInvalidated) => {
                   .then(returnValue)
               }
 
-              if (!Cypress.env(dataKey)) {
+              if (!getPluginConfigValue(dataKey)) {
                 debug('Setting key %s to %o', dataKey, entry)
-                Cypress.env(dataKey, entry)
+                setPluginConfigValue(dataKey, entry)
               }
               return returnValue()
             }
@@ -301,7 +307,7 @@ Cypress.clearDataSessions = () => {
   }
 
   return clearSharedSessions().then(() => {
-    const env = Cypress.env()
+    const env = getPluginConfigValues()
     Cypress._.map(env, (value, key) => {
       if (isDataSessionKey(key)) {
         Cypress.clearDataSession(extractKey(key))
@@ -318,16 +324,15 @@ Cypress.clearDataSession = (name) => {
 
   const insideTest = isTestRunning()
   const dataKey = formDataKey(name)
-  if (!(dataKey in Cypress.env())) {
+  if (!(dataKey in getPluginConfigValues())) {
     console.warn('Could not find data session under name "%s"', name)
-    const names = Object.keys(Cypress.env())
+    const names = Object.keys(getPluginConfigValues())
       .filter(isDataSessionKey)
       .map(extractKey)
       .join(',')
     console.warn('Available data sessions: %s', names)
   } else {
-    Cypress.env(dataKey, undefined)
-    delete Cypress.env()[dataKey]
+    removePluginConfigValue(dataKey)
     debug('deleted data session key %s', dataKey)
   }
   // clears the data from the plugin side
@@ -363,7 +368,7 @@ Cypress.clearDataSession = (name) => {
 // enable or disable data sessions
 Cypress.dataSessions = (enable) => {
   if (enable === undefined) {
-    const env = Cypress.env()
+    const env = getPluginConfigValues()
     const sessions = Cypress._.map(env, (value, key) => {
       if (isDataSessionKey(key) && value) {
         return {
@@ -395,7 +400,7 @@ Cypress.getDataSession = (name) => {
 
 Cypress.getDataSessionDetails = (name) => {
   const dataKey = formDataKey(name)
-  return Cypress.env(dataKey)
+  return getPluginConfigValue(dataKey)
 }
 
 Cypress.getSharedDataSessionDetails = (name) => {
@@ -420,7 +425,7 @@ Cypress.setDataSession = (name, data, skipValueCheck) => {
   const dependsOnTimestamps = []
 
   const sessionData = { data, timestamp, dependsOnTimestamps }
-  Cypress.env(dataKey, sessionData)
+  setPluginConfigValue(dataKey, sessionData)
   debug('set the data session %s to %o', name, sessionData)
 }
 

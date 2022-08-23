@@ -1,6 +1,10 @@
 // @ts-check
 
 import '../../src'
+import {
+  getPluginConfigValues,
+  removePluginConfigValue,
+} from 'cypress-plugin-config'
 
 describe('Restores data session', () => {
   beforeEach(() => {
@@ -25,20 +29,20 @@ describe('Restores data session', () => {
         delete this.parent
       })
       .then(() => {
-        expect(Cypress.env()).to.have.property(key)
+        expect(getPluginConfigValues()).to.have.property(key)
 
         cy.log('removing data session from env')
-        delete Cypress.env()[key]
+        removePluginConfigValue(key)
       })
       .then(() => {
-        expect(Cypress.env()).to.not.have.property(key)
+        expect(getPluginConfigValues()).to.not.have.property(key)
 
         cy.dataSession(parentOptions)
           .then(function () {
             expect(this.parent, 'has an alias').to.equal(1)
           })
           .then(() => {
-            expect(Cypress.env()).to.have.property(key)
+            expect(getPluginConfigValues()).to.have.property(key)
           })
       })
   })

@@ -1,5 +1,6 @@
 // @ts-check
 import '../../src'
+import { getPluginConfigValues } from 'cypress-plugin-config'
 
 describe('restores session from stored', () => {
   const name = 'test-data'
@@ -15,7 +16,7 @@ describe('restores session from stored', () => {
 
     cy.then(() => {
       // the cached data was put into Cypress.env
-      expect(Cypress.env())
+      expect(getPluginConfigValues())
         .to.have.property(key)
         .and.to.be.an('object')
         .and.to.have.property('data', 'test value')
