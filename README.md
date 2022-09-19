@@ -282,6 +282,18 @@ cy.dataSession({
 
 The above example will find the test user (by calling the `cy.task`) the very first time the command runs, since there is nothing in the data session yet. Then it validates the ID. If there is no ID, it runs the `setup` function to create the test user. If there is a test user, and it returned the ID from the `init` method, then it is cached (as if the `setup` method created it), and the test continues.
 
+### fetch the current data session value
+
+You can simply request the current data session, if any
+
+```js
+cy.dataSession('sessionName').then(value => {
+  ...
+})
+```
+
+If the data session is not found in memory, it tries to fetch it from the plugins space (maybe it is shared across specs). If still not found, it throws an error.
+
 ## Flow
 
 Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `init`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.
