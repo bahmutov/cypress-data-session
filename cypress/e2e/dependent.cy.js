@@ -96,4 +96,24 @@ describe('Dependent data session', () => {
         })
     })
   })
+
+  it('handles null', () => {
+    cy.dataSession({
+      name: 'handles null',
+      setup() {
+        return 'hello'
+      },
+      dependsOn: null,
+    })
+  })
+
+  it('handles undefined', () => {
+    cy.dataSession({
+      name: 'handles undefined',
+      setup() {
+        return 'hello'
+      },
+      dependsOn: undefined,
+    })
+  })
 })

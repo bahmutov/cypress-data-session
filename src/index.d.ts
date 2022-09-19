@@ -51,7 +51,7 @@ declare namespace Cypress {
      * be valid. If the user data session is recomputed, it will automatically invalidate
      * the logged in user cookie session that depends on it.
      */
-    dependsOn?: string | string[]
+    dependsOn?: string | string[] | null
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)

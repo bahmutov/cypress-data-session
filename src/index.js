@@ -87,7 +87,7 @@ Cypress.Commands.add(
     if (typeof dependsOn === 'string') {
       dependsOn = [dependsOn]
     }
-    if (typeof dependsOn === 'undefined') {
+    if (typeof dependsOn === 'undefined' || dependsOn === null) {
       dependsOn = []
     }
 
