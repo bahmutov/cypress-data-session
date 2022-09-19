@@ -83,6 +83,11 @@ declare namespace Cypress {
      * @see https://github.com/bahmutov/cypress-data-session
      */
     dataSession(options: DataSessionOptions): Chainable<any>
+
+    /**
+     * Fetches the current value stored for the given data session.
+     */
+    dataSession(name: string): Chainable<any>
   }
 
   // utility global methods added to Cypress global object
