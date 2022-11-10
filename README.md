@@ -20,7 +20,7 @@ Some people have noticed similarities between `cy.dataSession` command implement
 | Custom validation         | no                        | yes            |
 | Custom restore            | no                        | yes            |
 | Dependent caching         | no                        | yes            |
-| Static utility methods    | One                       | Many           |
+| Static utility methods    | limited                   | all            |
 | GUI integration           | yes                       | no             |
 | Should you use it?        | maybe                     | yes            |
 | Cypress version support   | newer versions            | all            |
