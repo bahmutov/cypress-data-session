@@ -6,6 +6,25 @@
 
 Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/) and [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/). Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io Tests](https://slides.com/bahmutov/data-for-e2e-tests).
 
+## cy.dataSession vs cy.session
+
+Some people have noticed similarities between `cy.dataSession` command implemented by this plugin and the [cy.session](https://on.cypress.io/session) command included in Cypress itself. Here is my table of differences.
+
+| Feature                   | cy.session                | cy.dataSession |
+| ------------------------- | ------------------------- | -------------- |
+| Command is                | official ✅               | community 🎁   |
+| Can cache                 | the browser session state | anything       |
+| Stability                 | experimental              | production     |
+| Cache across specs        | yes                       | yes            |
+| Access to the cached data | no                        | yes            |
+| Custom validation         | no                        | yes            |
+| Custom restore            | no                        | yes            |
+| Dependent caching         | no                        | yes            |
+| Static utility methods    | One                       | Many           |
+| GUI integration           | yes                       | no             |
+| Should you use it?        | maybe                     | yes            |
+| Cypress version support   | newer versions            | all            |
+
 ## Videos
 
 - [Introduction to cypress-data-session package](https://youtu.be/As5yqkoZOx8) for creating two chat rooms in the chat application
