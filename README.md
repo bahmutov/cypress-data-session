@@ -82,7 +82,7 @@ module.exports = (on, config) => {
 If using JavaScript, point the spec at this package using the `///` comment
 
 ```js
-// cypress/integration/spec.js
+// from your spec.js
 /// <reference types="cypress-data-session" />
 ```
 
@@ -98,7 +98,7 @@ You can call `cy.dataSession` with simple 3 arguments or with an options object 
 cy.dataSession(sessionName, setupFunction, validateValueFunction)
 ```
 
-This example comes from [cypress/integration/spec.js](./cypress/integration/spec.js)
+This example comes from [spec.cy.js](./cypress/e2e/spec.cy.js)
 
 ```js
 beforeEach(() => {
@@ -156,7 +156,7 @@ validate: true // no need to recompute the value, it is still valid
 validate: false // call setup again
 ```
 
-See [cypress/integration/validate.js](./cypress/integration/validate.js) spec.
+See [validate.cy.js](./cypress/e2e/validate.cy.js) spec.
 
 ### onInvalidated
 
@@ -169,11 +169,11 @@ function onInvalidated() {
 cy.dataSession(name, setupUser, validateUser, onInvalidated)
 ```
 
-See an example in the spec [cypress/integration/invalidate.js](./cypress/integration/invalidate.js) and video [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc).
+See an example in the spec [invalidate.cy.js](./cypress/e2e/invalidate.cy.js) and video [Invalidate cy.session From cypress-data-session](https://youtu.be/SyDz6l_EFoc).
 
 ### Options object
 
-You can pass multiple parameters using a single options object, see [cypress/integration/options.js](./cypress/integration/options.js)
+You can pass multiple parameters using a single options object, see [options.cy.js](./cypress/e2e/options.cy.js)
 
 ```js
 cy.dataSession({
