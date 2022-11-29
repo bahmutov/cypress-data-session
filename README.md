@@ -313,6 +313,22 @@ cy.dataSession('sessionName').then(value => {
 
 If the data session is not found in memory, it tries to fetch it from the plugins space (maybe it is shared across specs). If still not found, it throws an error.
 
+### showValue
+
+By default, the `cy.dataSession` only prints its messages. You can also print the actual data value into Cypress Command Log using the `showValue: true` option
+
+```js
+cy.dataSession({
+  name: 'my value',
+  setup() {
+    return 42
+  },
+  showValue: true,
+}).should('equal', 42)
+// The Command Log will have a message like
+// "my value has data 42"
+```
+
 ## Flow
 
 Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `init`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.
