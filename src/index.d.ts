@@ -52,6 +52,10 @@ declare namespace Cypress {
      * the logged in user cookie session that depends on it.
      */
     dependsOn?: string | string[] | null
+    /**
+     * Print the created or restored value in the Cypress Command Log
+     */
+    showValue?: boolean
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)

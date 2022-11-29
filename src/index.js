@@ -62,6 +62,7 @@ Cypress.Commands.add(
     let preSetup
     let recreate
     let dependsOn
+    let showValue
 
     // check if we are using options / separate arguments
     if (typeof name === 'object') {
@@ -77,6 +78,7 @@ Cypress.Commands.add(
       recreate = options.recreate
       preSetup = options.preSetup
       dependsOn = options.dependsOn
+      showValue = options.showValue
     }
 
     if (typeof setup !== 'function') {
@@ -153,6 +155,10 @@ Cypress.Commands.add(
             debug('sharing the session %s across specs', dataKey)
             cy.task('dataSession:save', { key: dataKey, value: sessionData })
           }
+        }
+        if (showValue) {
+          // TODO: think how to better convert data to string
+          cy.log(`**${name}** has data ${data}`)
         }
         // automatically create an alias
         cy.wrap(data, { log: false }).as(name)
@@ -273,7 +279,11 @@ Cypress.Commands.add(
                   `recomputing **${name}** because a parent session has been recomputed`,
                 )
               } else {
-                cy.log(`data **${name}** is still valid`)
+                if (showValue) {
+                  cy.log(`data **${name}** ${value} is still valid`)
+                } else {
+                  cy.log(`data **${name}** is still valid`)
+                }
                 if (Cypress._.isFunction(recreate)) {
                   cy.log(`recreating **${name}**`)
                   return cy
