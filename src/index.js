@@ -2,6 +2,8 @@
 
 const debug = require('debug')('cypress-data-session')
 const sha256 = require('./sha')
+const { valueToString } = require('./utils')
+
 const {
   getPluginConfigValue,
   setPluginConfigValue,
@@ -157,8 +159,8 @@ Cypress.Commands.add(
           }
         }
         if (showValue) {
-          // TODO: think how to better convert data to string
-          cy.log(`**${name}** has data ${data}`)
+          const s = valueToString(data)
+          cy.log(`**${name}** has data ${s}`)
         }
         // automatically create an alias
         cy.wrap(data, { log: false }).as(name)
@@ -280,7 +282,8 @@ Cypress.Commands.add(
                 )
               } else {
                 if (showValue) {
-                  cy.log(`data **${name}** ${value} is still valid`)
+                  const s = valueToString(value)
+                  cy.log(`data **${name}** ${s} is still valid`)
                 } else {
                   cy.log(`data **${name}** is still valid`)
                 }
