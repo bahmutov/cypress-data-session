@@ -60,11 +60,13 @@ If you plan to use the [shareAcrossSpecs](#shareacrossspecs) option, you need to
 ```js
 // cypress.config.js
 import { defineConfig } from 'cypress'
+const registerDataSession = require('cypress-data-session/src/plugin')
 
 export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
-      require('cypress-data-session/src/plugin')(on, config)
+      registerDataSession(on, config)
+      return config
     },
   },
 })
