@@ -4,9 +4,16 @@
 
 > Cypress command for flexible test data setup
 
-Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/) and [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/). Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io Tests](https://slides.com/bahmutov/data-for-e2e-tests).
+Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/), [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/), [Crawl Weather Using Cypress](https://glebbahmutov.com/blog/crawl-weather/). Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io Tests](https://slides.com/bahmutov/data-for-e2e-tests).
 
-🎓 Covered in my course [Cypress Plugins](https://cypress.tips/courses/cypress-plugins)
+🎓 Covered in my course [Cypress Plugins](https://cypress.tips/courses/cypress-plugins):
+
+- [Lesson j1: Create and cache an item](https://cypress.tips/courses/cypress-plugins/lessons/j1)
+- [Lesson j2: Data session lifecycle](https://cypress.tips/courses/cypress-plugins/lessons/j2)
+- [Lesson j3: Dependent data sessions](https://cypress.tips/courses/cypress-plugins/lessons/j3)
+- [Lesson j4: Decide what to cache in the data session](https://cypress.tips/courses/cypress-plugins/lessons/j4)
+- [Lesson j5: Share the data session between specs](https://cypress.tips/courses/cypress-plugins/lessons/j5)
+- [Lesson j6: Instant login using a data session](https://cypress.tips/courses/cypress-plugins/lessons/j6)
 
 ## cy.dataSession vs cy.session
 
