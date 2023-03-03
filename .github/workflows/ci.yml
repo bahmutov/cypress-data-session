@@ -15,6 +15,7 @@ jobs:
           build: npm run lint
 
       - name: Semantic Release 🚀
+        if: github.ref == 'refs/heads/main'
         uses: cycjimmy/semantic-release-action@v3
         with:
           branch: main
