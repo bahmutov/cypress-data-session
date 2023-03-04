@@ -4,9 +4,20 @@
 
 > Cypress command for flexible test data setup
 
-Read the blog post [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/), [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/), [Crawl Weather Using Cypress](https://glebbahmutov.com/blog/crawl-weather/). Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io Tests](https://slides.com/bahmutov/data-for-e2e-tests).
+## Blog posts
 
-🎓 Covered in my course [Cypress Plugins](https://cypress.tips/courses/cypress-plugins):
+📝 Read the blog posts
+
+- [Flexible Cypress Data Setup And Validation](https://glebbahmutov.com/blog/cypresss-data-session/)
+- [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/)
+- [Crawl Weather Using Cypress](https://glebbahmutov.com/blog/crawl-weather/)
+- [Minimize Mailosaur Use](https://glebbahmutov.com/blog/minimize-mailosaur-use/)
+
+Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io Tests](https://slides.com/bahmutov/data-for-e2e-tests).
+
+## Training
+
+🎓 This plugin is covered in my course [Cypress Plugins](https://cypress.tips/courses/cypress-plugins):
 
 - [Lesson j1: Create and cache an item](https://cypress.tips/courses/cypress-plugins/lessons/j1)
 - [Lesson j2: Data session lifecycle](https://cypress.tips/courses/cypress-plugins/lessons/j2)
