@@ -26,6 +26,10 @@ Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io 
 - [Lesson j5: Share the data session between specs](https://cypress.tips/courses/cypress-plugins/lessons/j5)
 - [Lesson j6: Instant login using a data session](https://cypress.tips/courses/cypress-plugins/lessons/j6)
 
+And in my course [Testing The Swag Store](https://cypress.tips/courses/swag-store)
+
+- [Lesson 14: Instant login using cypress-data-session](https://cypress.tips/courses/swag-store/lessons/lesson14)
+
 ## cy.dataSession vs cy.session
 
 Some people have noticed similarities between `cy.dataSession` command implemented by this plugin and the [cy.session](https://on.cypress.io/session) command included in Cypress itself. Here is my table of differences.
@@ -34,7 +38,7 @@ Some people have noticed similarities between `cy.dataSession` command implement
 | ------------------------- | ------------------------- | -------------- |
 | Command is                | official ✅               | community 🎁   |
 | Can cache                 | the browser session state | anything       |
-| Stability                 | experimental              | production     |
+| Stability                 | production                | production     |
 | Cache across specs        | yes                       | yes            |
 | Access to the cached data | no                        | yes            |
 | Custom validation         | no                        | yes            |
