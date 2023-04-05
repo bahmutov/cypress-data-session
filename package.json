@@ -11,7 +11,7 @@
     "test": "cypress run",
     "semantic-release": "semantic-release",
     "lint": "tsc --pretty --noEmit --allowJS cypress/**/*.js",
-    "cy:open": "cypress open",
+    "cy:open": "cypress open --e2e --browser electron",
     "update-badges": "npx -p dependency-version-badge update-badge cypress"
   },
   "repository": {

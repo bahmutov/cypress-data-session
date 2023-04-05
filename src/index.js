@@ -12,6 +12,11 @@ const {
 } = require('cypress-plugin-config')
 
 /**
+ * Name to use when logging our commands to Command Log
+ */
+const logName = 'data-session'
+
+/**
  * Returns true if we are currently running a test
  */
 function isTestRunning() {
@@ -39,7 +44,7 @@ function getDataSession(name) {
   if (entry) {
     return entry.data
   }
-  return cy.task('dataSession:load', dataKey).then((loaded) => {
+  return cy.task('dataSession:load', dataKey, { log: false }).then((loaded) => {
     if (loaded) {
       return loaded.data
     }
@@ -164,7 +169,11 @@ Cypress.Commands.add(
 
           if (shareAcrossSpecs) {
             debug('sharing the session %s across specs', dataKey)
-            cy.task('dataSession:save', { key: dataKey, value: sessionData })
+            cy.task(
+              'dataSession:save',
+              { key: dataKey, value: sessionData },
+              { log: false },
+            )
           }
         }
         if (showValue) {
@@ -188,19 +197,24 @@ Cypress.Commands.add(
       return setupAndSaveData()
     }
 
-    cy.log(`dataSession **${name}**`)
+    Cypress.log({
+      name: logName,
+      message: `named **${name}**${shareAcrossSpecs ? ' (shared)' : ''}`,
+    })
 
     let entry = getPluginConfigValue(dataKey)
     cy.wrap(entry ? entry.data : undefined, { log: false })
       .then((value) => {
         if (shareAcrossSpecs) {
-          return cy.task('dataSession:load', dataKey).then((loaded) => {
-            if (loaded) {
-              entry = loaded
-              return loaded.data
-            }
-            return undefined
-          })
+          return cy
+            .task('dataSession:load', dataKey, { log: false })
+            .then((loaded) => {
+              if (loaded) {
+                entry = loaded
+                return loaded.data
+              }
+              return undefined
+            })
         }
       })
       .then((value) => {
@@ -213,7 +227,10 @@ Cypress.Commands.add(
           return cy.then(init).then((initValue) => {
             if (Cypress._.isNil(initValue)) {
               // we need to re-run the setup commands
-              cy.log(`first time for session **${name}**`)
+              Cypress.log({
+                name: '',
+                message: `first time for session **${name}**`,
+              })
               return setupAndSaveData()
             } else {
               return cy
@@ -244,14 +261,20 @@ Cypress.Commands.add(
             if (entry.setupHash && entry.setupHash !== setupHash) {
               // the setup function has changed,
               // we need to re-run the setup commands
-              cy.log(`setup function changed for session **${name}**`)
+              Cypress.log({
+                name: '',
+                message: `options changed for session **${name}**`,
+              })
               return setupAndSaveData()
             }
 
             const now = +new Date()
             if (entry.expiresAt < now) {
               debug('session expired at %d now is %d', entry.expiresAt, now)
-              cy.log(`data session **${name}** has expired`)
+              Cypress.log({
+                name: '',
+                message: `data session **${name}** has expired`,
+              })
               return setupAndSaveData()
             }
           }
@@ -302,9 +325,15 @@ Cypress.Commands.add(
               } else {
                 if (showValue) {
                   const s = valueToString(value)
-                  cy.log(`data **${name}** ${s} is still valid`)
+                  Cypress.log({
+                    name: '',
+                    message: `data **${name}** ${s} is still valid`,
+                  })
                 } else {
-                  cy.log(`data **${name}** is still valid`)
+                  Cypress.log({
+                    name: '',
+                    message: `data **${name}** is still valid`,
+                  })
                 }
                 if (Cypress._.isFunction(recreate)) {
                   cy.log(`recreating **${name}**`)
@@ -396,7 +425,7 @@ Cypress.clearDataSession = (name) => {
       // delete the alias
       const context = Object.getPrototypeOf(cy.state('ctx'))
       delete context[name]
-      return cy.task('dataSession:clear', dataKey)
+      return cy.task('dataSession:clear', dataKey, { log: false })
     } else {
       return cy.now('task', 'dataSession:clear', dataKey)
     }
@@ -411,8 +440,9 @@ Cypress.clearDataSession = (name) => {
   }
 
   if (insideTest) {
+    Cypress.log({ name: logName, message: `clear data session **${name}**` })
     return cy
-      .log(`clear data session **${name}**`)
+      .wrap(null, { log: false })
       .then(clearSharedDataSession)
       .then(logCleared)
   }
@@ -462,9 +492,13 @@ Cypress.getSharedDataSessionDetails = (name) => {
   // gets the value from the plugin side if any
   const dataKey = formDataKey(name)
   if (isTestRunning()) {
-    return cy.task('dataSession:load', dataKey).then(console.log)
+    return cy
+      .task('dataSession:load', dataKey, { log: false })
+      .then(console.log)
   } else {
-    return cy.now('task', 'dataSession:load', dataKey).then(console.log)
+    return cy
+      .now('task', 'dataSession:load', dataKey, { log: false })
+      .then(console.log)
   }
 }
 
