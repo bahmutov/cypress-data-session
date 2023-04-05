@@ -65,6 +65,7 @@ Cypress.Commands.add(
     let recreate
     let dependsOn
     let showValue
+    let expires
 
     // check if we are using options / separate arguments
     if (typeof name === 'object') {
@@ -81,6 +82,7 @@ Cypress.Commands.add(
       preSetup = options.preSetup
       dependsOn = options.dependsOn
       showValue = options.showValue
+      expires = options.expires
     }
 
     if (typeof setup !== 'function') {
@@ -149,6 +151,9 @@ Cypress.Commands.add(
             timestamp,
             dependsOnTimestamps,
             setupHash,
+          }
+          if (expires) {
+            sessionData.expiresAt = timestamp + expires
           }
           setPluginConfigValue(dataKey, sessionData)
           debug('set the data session %s to %o', dataKey, sessionData)
@@ -231,11 +236,20 @@ Cypress.Commands.add(
         }
 
         return sha256(setupSource).then((setupHash) => {
-          if (entry && entry.setupHash && entry.setupHash !== setupHash) {
-            // the setup function has changed,
-            // we need to re-run the setup commands
-            cy.log(`setup function changed for session **${name}**`)
-            return setupAndSaveData()
+          if (entry) {
+            if (entry.setupHash && entry.setupHash !== setupHash) {
+              // the setup function has changed,
+              // we need to re-run the setup commands
+              cy.log(`setup function changed for session **${name}**`)
+              return setupAndSaveData()
+            }
+
+            const now = +new Date()
+            if (entry.expiresAt < now) {
+              debug('session expired at %d now is %d', entry.expiresAt, now)
+              cy.log(`data session **${name}** has expired`)
+              return setupAndSaveData()
+            }
           }
 
           function returnValue() {
@@ -275,6 +289,7 @@ Cypress.Commands.add(
           cy.then(() => validate(value)).then((valid) => {
             if (valid) {
               const parentSessionsAreTheSame = parentsRecomputed()
+
               if (!parentSessionsAreTheSame) {
                 debug('parentSessionsAreTheSame', parentSessionsAreTheSame)
                 cy.log(

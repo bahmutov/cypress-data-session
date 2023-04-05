@@ -56,6 +56,11 @@ declare namespace Cypress {
      * Print the created or restored value in the Cypress Command Log
      */
     showValue?: boolean
+    /**
+     * Timeout in milliseconds before the data expires. Counted from the moment of the
+     * data session setup.
+     */
+    expires?: number
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)
