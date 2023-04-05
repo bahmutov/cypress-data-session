@@ -356,6 +356,20 @@ cy.dataSession({
 // "my value has data 42"
 ```
 
+### expires
+
+You can automatically recompute the data session by calling its `setup` method if more than N milliseconds have passed since the data session was set up.
+
+```js
+cy.dataSession({
+  name: 'valid for 1 second,
+  setup() {
+    return 42
+  },
+  expires: 1000 // ms
+})
+```
+
 ## Flow
 
 Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `init`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.
