@@ -178,7 +178,7 @@ Cypress.Commands.add(
         }
         if (showValue) {
           const s = valueToString(data)
-          cy.log(`**${name}** has data ${s}`)
+          Cypress.log({ log: logName, message: `**${name}** has data ${s}` })
         }
         // automatically create an alias
         cy.wrap(data, { log: false }).as(name)
@@ -193,7 +193,7 @@ Cypress.Commands.add(
     }
 
     if (pluginDisabled) {
-      cy.log('dataSessions disabled')
+      Cypress.log({ name: logName, message: 'plugin is disabled' })
       return setupAndSaveData()
     }
 
@@ -228,7 +228,8 @@ Cypress.Commands.add(
             if (Cypress._.isNil(initValue)) {
               // we need to re-run the setup commands
               Cypress.log({
-                name: '',
+                name: logName,
+                type: 'parent',
                 message: `first time for session **${name}**`,
               })
               return setupAndSaveData()
@@ -237,10 +238,18 @@ Cypress.Commands.add(
                 .then(() => validate(initValue))
                 .then((valid) => {
                   if (valid) {
-                    cy.log(`data **${name}** will use the init value`)
+                    Cypress.log({
+                      name: logName,
+                      type: 'parent',
+                      message: `data **${name}** will use the init value`,
+                    })
 
                     if (Cypress._.isFunction(recreate)) {
-                      cy.log(`recreating the **${name}**`)
+                      Cypress.log({
+                        name: logName,
+                        type: 'parent',
+                        message: `recreating the **${name}**`,
+                      })
                       return cy
                         .then(() => recreate(initValue))
                         .then(() => saveData(initValue, entry))
@@ -248,7 +257,11 @@ Cypress.Commands.add(
                       return saveData(initValue)
                     }
                   } else {
-                    cy.log(`data **${name}** init did not pass validation`)
+                    Cypress.log({
+                      name: logName,
+                      type: 'parent',
+                      message: `data **${name}** init did not pass validation`,
+                    })
                     return setupAndSaveData()
                   }
                 })
@@ -262,7 +275,8 @@ Cypress.Commands.add(
               // the setup function has changed,
               // we need to re-run the setup commands
               Cypress.log({
-                name: '',
+                name: logName,
+                type: 'parent',
                 message: `options changed for session **${name}**`,
               })
               return setupAndSaveData()
@@ -272,7 +286,8 @@ Cypress.Commands.add(
             if (entry.expiresAt < now) {
               debug('session expired at %d now is %d', entry.expiresAt, now)
               Cypress.log({
-                name: '',
+                name: logName,
+                type: 'parent',
                 message: `data session **${name}** has expired`,
               })
               return setupAndSaveData()
@@ -319,24 +334,30 @@ Cypress.Commands.add(
 
               if (!parentSessionsAreTheSame) {
                 debug('parentSessionsAreTheSame', parentSessionsAreTheSame)
-                cy.log(
-                  `recomputing **${name}** because a parent session has been recomputed`,
-                )
+                Cypress.log({
+                  name: logName,
+                  message: `recomputing **${name}** because a parent session has been recomputed`,
+                })
               } else {
                 if (showValue) {
                   const s = valueToString(value)
                   Cypress.log({
-                    name: '',
+                    name: logName,
+                    type: 'parent',
                     message: `data **${name}** ${s} is still valid`,
                   })
                 } else {
                   Cypress.log({
-                    name: '',
+                    name: logName,
+                    type: 'parent',
                     message: `data **${name}** is still valid`,
                   })
                 }
                 if (Cypress._.isFunction(recreate)) {
-                  cy.log(`recreating **${name}**`)
+                  Cypress.log({
+                    name: logName,
+                    message: `recreating **${name}**`,
+                  })
                   return cy
                     .then(() => recreate(value))
                     .then(() => {
@@ -366,7 +387,11 @@ Cypress.Commands.add(
                 return onInvalidated(value)
               }
             }).then(() => {
-              cy.log(`recompute data for **${name}**`)
+              Cypress.log({
+                name: logName,
+                type: 'parent',
+                message: `recompute data for **${name}**`,
+              })
               // TODO: validate the value yielded by the setup
               return setupAndSaveData()
             })
