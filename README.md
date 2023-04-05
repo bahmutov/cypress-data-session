@@ -45,6 +45,8 @@ Some people have noticed similarities between `cy.dataSession` command implement
 | Custom validation         | no                        | yes            |
 | Custom restore            | no                        | yes            |
 | Dependent caching         | no                        | yes            |
+| Time limit                | no                        | yes            |
+| Use count limit           | no                        | yes            |
 | Static utility methods    | limited                   | all            |
 | GUI integration           | yes                       | no             |
 | Should you use it?        | maybe                     | yes            |
@@ -368,6 +370,33 @@ cy.dataSession({
     return 42
   },
   expires: 1000 // ms
+})
+```
+
+### limit
+
+You can limit how many times a piece of cached data is used before automatically recomputing it. For example, to limit a cached item to be used 3 times only (including the the first one):
+
+```js
+beforeEach(() => {
+  cy.dataSession({
+    name: 'limited',
+    setup() { ... },
+    limit: 3
+  })
+})
+it('works 1', () => {
+  // first use, calls setup() in the beforeEach hook
+})
+it('works 2', () => {
+  // second use, uses cached value the beforeEach hook
+})
+it('works 3', () => {
+  // third use, uses cached value in the beforeEach hook
+})
+it('works 4', () => {
+  // over the limit, has to recompute the data
+  // calls setup() in the beforeEach hook
 })
 ```
 

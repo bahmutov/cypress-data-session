@@ -71,6 +71,7 @@ Cypress.Commands.add(
     let dependsOn
     let showValue
     let expires
+    let limit
 
     // check if we are using options / separate arguments
     if (typeof name === 'object') {
@@ -88,6 +89,28 @@ Cypress.Commands.add(
       dependsOn = options.dependsOn
       showValue = options.showValue
       expires = options.expires
+      limit = options.limit
+    }
+
+    if (typeof limit !== 'undefined') {
+      if (typeof limit !== 'number') {
+        throw new Error(
+          `cypress-data-session: the limit for session ${name} is not a number`,
+        )
+      }
+      if (limit < 1) {
+        throw new Error(
+          `cypress-data-session: the limit for session ${name} was ${limit}, should be positive`,
+        )
+      }
+      if (shareAcrossSpecs) {
+        throw new Error(
+          [
+            'cypress-data-session: limit and shareAcrossSpecs are not compatible yet',
+            'https://github.com/bahmutov/cypress-data-session/issues/120',
+          ].join('\n'),
+        )
+      }
     }
 
     if (typeof setup !== 'function') {
@@ -140,8 +163,13 @@ Cypress.Commands.add(
     // we want to recompute the data session if the user changes
     // any of its options or the code in the setup callback function
     const setupSource =
-      JSON.stringify({ expires, shareAcrossSpecs, dependsOn, showValue }) +
-      setup.toString()
+      JSON.stringify({
+        expires,
+        shareAcrossSpecs,
+        dependsOn,
+        showValue,
+        limit,
+      }) + setup.toString()
 
     const saveData = (data) => {
       if (data === undefined) {
@@ -163,6 +191,10 @@ Cypress.Commands.add(
           }
           if (expires) {
             sessionData.expiresAt = timestamp + expires
+          }
+          if (typeof limit === 'number') {
+            // count the current call towards the limit
+            sessionData.limit = limit - 1
           }
           setPluginConfigValue(dataKey, sessionData)
           debug('set the data session %s to %o', dataKey, sessionData)
@@ -291,6 +323,21 @@ Cypress.Commands.add(
                 message: `data session **${name}** has expired`,
               })
               return setupAndSaveData()
+            }
+          }
+          if ('limit' in entry) {
+            if (entry.limit < 1) {
+              debug('limit reached zero %o', entry)
+              Cypress.log({
+                name: logName,
+                type: 'parent',
+                message: `data session **${name}** has reached limit 0`,
+              })
+              return setupAndSaveData()
+            } else {
+              entry.limit -= 1
+              debug('saving updated limit %o', entry)
+              setPluginConfigValue(dataKey, entry)
             }
           }
 
