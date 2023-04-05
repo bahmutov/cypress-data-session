@@ -1,6 +1,6 @@
 // @ts-check
 
-import '../../src'
+import '../../../src'
 
 describe('setup function changes', () => {
   const name = 'setup-changes-example'

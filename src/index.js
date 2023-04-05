@@ -132,7 +132,11 @@ Cypress.Commands.add(
       })
     }
 
-    const setupSource = setup.toString()
+    // we want to recompute the data session if the user changes
+    // any of its options or the code in the setup callback function
+    const setupSource =
+      JSON.stringify({ expires, shareAcrossSpecs, dependsOn, showValue }) +
+      setup.toString()
 
     const saveData = (data) => {
       if (data === undefined) {
