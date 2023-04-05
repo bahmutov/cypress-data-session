@@ -22,7 +22,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Render images for every Mermaid diagram in all Markdown files (*.md) in the repo
-        uses: nielsvaneck/render-md-mermaid@v2
+        # https://github.com/bahmutov/cypress-data-session/issues/115
+        uses: nielsvaneck/render-md-mermaid@31c5e6e9ece51faf4c38311f9f2d551ebeaeb81e
 
       - run: git status
 
