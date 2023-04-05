@@ -12,6 +12,11 @@ const {
 } = require('cypress-plugin-config')
 
 /**
+ * Name to use when logging our commands to Command Log
+ */
+const logName = 'data-session'
+
+/**
  * Returns true if we are currently running a test
  */
 function isTestRunning() {
@@ -39,7 +44,7 @@ function getDataSession(name) {
   if (entry) {
     return entry.data
   }
-  return cy.task('dataSession:load', dataKey).then((loaded) => {
+  return cy.task('dataSession:load', dataKey, { log: false }).then((loaded) => {
     if (loaded) {
       return loaded.data
     }
@@ -164,12 +169,16 @@ Cypress.Commands.add(
 
           if (shareAcrossSpecs) {
             debug('sharing the session %s across specs', dataKey)
-            cy.task('dataSession:save', { key: dataKey, value: sessionData })
+            cy.task(
+              'dataSession:save',
+              { key: dataKey, value: sessionData },
+              { log: false },
+            )
           }
         }
         if (showValue) {
           const s = valueToString(data)
-          cy.log(`**${name}** has data ${s}`)
+          Cypress.log({ log: logName, message: `**${name}** has data ${s}` })
         }
         // automatically create an alias
         cy.wrap(data, { log: false }).as(name)
@@ -184,23 +193,28 @@ Cypress.Commands.add(
     }
 
     if (pluginDisabled) {
-      cy.log('dataSessions disabled')
+      Cypress.log({ name: logName, message: 'plugin is disabled' })
       return setupAndSaveData()
     }
 
-    cy.log(`dataSession **${name}**`)
+    Cypress.log({
+      name: logName,
+      message: `named **${name}**${shareAcrossSpecs ? ' (shared)' : ''}`,
+    })
 
     let entry = getPluginConfigValue(dataKey)
     cy.wrap(entry ? entry.data : undefined, { log: false })
       .then((value) => {
         if (shareAcrossSpecs) {
-          return cy.task('dataSession:load', dataKey).then((loaded) => {
-            if (loaded) {
-              entry = loaded
-              return loaded.data
-            }
-            return undefined
-          })
+          return cy
+            .task('dataSession:load', dataKey, { log: false })
+            .then((loaded) => {
+              if (loaded) {
+                entry = loaded
+                return loaded.data
+              }
+              return undefined
+            })
         }
       })
       .then((value) => {
@@ -213,17 +227,29 @@ Cypress.Commands.add(
           return cy.then(init).then((initValue) => {
             if (Cypress._.isNil(initValue)) {
               // we need to re-run the setup commands
-              cy.log(`first time for session **${name}**`)
+              Cypress.log({
+                name: logName,
+                type: 'parent',
+                message: `first time for session **${name}**`,
+              })
               return setupAndSaveData()
             } else {
               return cy
                 .then(() => validate(initValue))
                 .then((valid) => {
                   if (valid) {
-                    cy.log(`data **${name}** will use the init value`)
+                    Cypress.log({
+                      name: logName,
+                      type: 'parent',
+                      message: `data **${name}** will use the init value`,
+                    })
 
                     if (Cypress._.isFunction(recreate)) {
-                      cy.log(`recreating the **${name}**`)
+                      Cypress.log({
+                        name: logName,
+                        type: 'parent',
+                        message: `recreating the **${name}**`,
+                      })
                       return cy
                         .then(() => recreate(initValue))
                         .then(() => saveData(initValue, entry))
@@ -231,7 +257,11 @@ Cypress.Commands.add(
                       return saveData(initValue)
                     }
                   } else {
-                    cy.log(`data **${name}** init did not pass validation`)
+                    Cypress.log({
+                      name: logName,
+                      type: 'parent',
+                      message: `data **${name}** init did not pass validation`,
+                    })
                     return setupAndSaveData()
                   }
                 })
@@ -244,14 +274,22 @@ Cypress.Commands.add(
             if (entry.setupHash && entry.setupHash !== setupHash) {
               // the setup function has changed,
               // we need to re-run the setup commands
-              cy.log(`setup function changed for session **${name}**`)
+              Cypress.log({
+                name: logName,
+                type: 'parent',
+                message: `options changed for session **${name}**`,
+              })
               return setupAndSaveData()
             }
 
             const now = +new Date()
             if (entry.expiresAt < now) {
               debug('session expired at %d now is %d', entry.expiresAt, now)
-              cy.log(`data session **${name}** has expired`)
+              Cypress.log({
+                name: logName,
+                type: 'parent',
+                message: `data session **${name}** has expired`,
+              })
               return setupAndSaveData()
             }
           }
@@ -296,18 +334,30 @@ Cypress.Commands.add(
 
               if (!parentSessionsAreTheSame) {
                 debug('parentSessionsAreTheSame', parentSessionsAreTheSame)
-                cy.log(
-                  `recomputing **${name}** because a parent session has been recomputed`,
-                )
+                Cypress.log({
+                  name: logName,
+                  message: `recomputing **${name}** because a parent session has been recomputed`,
+                })
               } else {
                 if (showValue) {
                   const s = valueToString(value)
-                  cy.log(`data **${name}** ${s} is still valid`)
+                  Cypress.log({
+                    name: logName,
+                    type: 'parent',
+                    message: `data **${name}** ${s} is still valid`,
+                  })
                 } else {
-                  cy.log(`data **${name}** is still valid`)
+                  Cypress.log({
+                    name: logName,
+                    type: 'parent',
+                    message: `data **${name}** is still valid`,
+                  })
                 }
                 if (Cypress._.isFunction(recreate)) {
-                  cy.log(`recreating **${name}**`)
+                  Cypress.log({
+                    name: logName,
+                    message: `recreating **${name}**`,
+                  })
                   return cy
                     .then(() => recreate(value))
                     .then(() => {
@@ -337,7 +387,11 @@ Cypress.Commands.add(
                 return onInvalidated(value)
               }
             }).then(() => {
-              cy.log(`recompute data for **${name}**`)
+              Cypress.log({
+                name: logName,
+                type: 'parent',
+                message: `recompute data for **${name}**`,
+              })
               // TODO: validate the value yielded by the setup
               return setupAndSaveData()
             })
@@ -396,7 +450,7 @@ Cypress.clearDataSession = (name) => {
       // delete the alias
       const context = Object.getPrototypeOf(cy.state('ctx'))
       delete context[name]
-      return cy.task('dataSession:clear', dataKey)
+      return cy.task('dataSession:clear', dataKey, { log: false })
     } else {
       return cy.now('task', 'dataSession:clear', dataKey)
     }
@@ -411,8 +465,9 @@ Cypress.clearDataSession = (name) => {
   }
 
   if (insideTest) {
+    Cypress.log({ name: logName, message: `clear data session **${name}**` })
     return cy
-      .log(`clear data session **${name}**`)
+      .wrap(null, { log: false })
       .then(clearSharedDataSession)
       .then(logCleared)
   }
@@ -462,9 +517,13 @@ Cypress.getSharedDataSessionDetails = (name) => {
   // gets the value from the plugin side if any
   const dataKey = formDataKey(name)
   if (isTestRunning()) {
-    return cy.task('dataSession:load', dataKey).then(console.log)
+    return cy
+      .task('dataSession:load', dataKey, { log: false })
+      .then(console.log)
   } else {
-    return cy.now('task', 'dataSession:load', dataKey).then(console.log)
+    return cy
+      .now('task', 'dataSession:load', dataKey, { log: false })
+      .then(console.log)
   }
 }
 
