@@ -61,6 +61,14 @@ declare namespace Cypress {
      * data session setup.
      */
     expires?: number
+    /**
+     * Number of calls to `cy.dataSession` for the data until it needs to be computed
+     * using the `setup` method again. Useful to cache a shared resource, like
+     * a limited number of items to be consumed by the tests.
+     * Cannot be used with `shareAcrossSpecs` yet
+     * @see https://github.com/bahmutov/cypress-data-session/issues/120
+     */
+    limit?: number
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)
