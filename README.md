@@ -29,6 +29,7 @@ Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io 
 And in my course [Testing The Swag Store](https://cypress.tips/courses/swag-store)
 
 - [Lesson 14: Instant login using cypress-data-session](https://cypress.tips/courses/swag-store/lessons/lesson14)
+- [Bonus 33: Expire data session after N milliseconds](https://cypress.tips/courses/swag-store/lessons/bonus33)
 
 ## cy.dataSession vs cy.session
 
