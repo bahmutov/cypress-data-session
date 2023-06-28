@@ -1,6 +1,6 @@
 # cypress-data-session
 
-[![ci status][ci image]][ci url] [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-12.15.0-brightgreen)
+[![ci status][ci image]][ci url] [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-12.16.0-brightgreen)
 
 > Cypress command for flexible test data setup
 
