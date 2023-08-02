@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/bahmutov/cypress-data-session#readme",
   "devDependencies": {
-    "cypress": "12.17.2",
+    "cypress": "12.17.3",
     "prettier": "3.0.0",
     "semantic-release": "21.0.7",
     "typescript": "4.8.4"
