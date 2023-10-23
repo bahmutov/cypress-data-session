@@ -25,6 +25,7 @@ Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io 
 - [Lesson j4: Decide what to cache in the data session](https://cypress.tips/courses/cypress-plugins/lessons/j4)
 - [Lesson j5: Share the data session between specs](https://cypress.tips/courses/cypress-plugins/lessons/j5)
 - [Lesson j6: Instant login using a data session](https://cypress.tips/courses/cypress-plugins/lessons/j6)
+- [Lesson o4: Create data once using the support file hook](https://cypress.tips/courses/cypress-plugins/lessons/o4)
 
 And in my course [Testing The Swag Store](https://cypress.tips/courses/swag-store)
 
