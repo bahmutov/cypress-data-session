@@ -401,6 +401,10 @@ it('works 4', () => {
 })
 ```
 
+### recomputeOnRetry
+
+Sometimes you want to enable test retries, but the data caching makes it hard to understand and run the full test. You can set the `recomputeOnRetry: true` to automatically call the `setup` again on tet retries.
+
 ## Flow
 
 Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `init`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.

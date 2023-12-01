@@ -72,6 +72,7 @@ Cypress.Commands.add(
     let showValue
     let expires
     let limit
+    let recomputeOnRetry
 
     // check if we are using options / separate arguments
     if (typeof name === 'object') {
@@ -90,6 +91,7 @@ Cypress.Commands.add(
       showValue = options.showValue
       expires = options.expires
       limit = options.limit
+      recomputeOnRetry = options.recomputeOnRetry
     }
 
     if (typeof limit !== 'undefined') {
@@ -384,6 +386,15 @@ Cypress.Commands.add(
                 Cypress.log({
                   name: logName,
                   message: `recomputing **${name}** because a parent session has been recomputed`,
+                })
+              } else if (recomputeOnRetry && Cypress.currentRetry) {
+                // we need to re-run the setup commands
+                // because this test is retried and the user
+                // wants to recreate the data session on retry
+                Cypress.log({
+                  name: logName,
+                  type: 'parent',
+                  message: `recreate on retry ${Cypress.currentRetry} session **${name}**`,
                 })
               } else {
                 if (showValue) {

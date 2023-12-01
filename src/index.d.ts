@@ -69,6 +69,11 @@ declare namespace Cypress {
      * @see https://github.com/bahmutov/cypress-data-session/issues/120
      */
     limit?: number
+    /**
+     * Call the setup again even if the data session is valid
+     * on the test retry.
+     */
+    recomputeOnRetry?: boolean
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)
