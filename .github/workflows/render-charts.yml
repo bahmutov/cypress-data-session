@@ -2,16 +2,10 @@
 # https://nielsvaneck.com/post/2021-01-31-render-md-mermaid-a-github-action/
 name: render-charts
 
-# only re-render Mermaid charts
-# if the README file changes on the main branch
-# or this workflow file changes
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - README.md
-      - .github/workflows/render-charts.yml
+  schedule:
+    # update charts every night
+    - cron: '0 4 * * *'
 
 jobs:
   render-md-mermaid:
