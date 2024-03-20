@@ -488,6 +488,9 @@ Cypress.clearDataSession = (name) => {
   if (!name) {
     throw new Error('Expected a data session name to clear')
   }
+  if (typeof name !== 'string') {
+    throw new Error('Expected a string data session name to clear')
+  }
 
   const insideTest = isTestRunning()
   const dataKey = formDataKey(name)
