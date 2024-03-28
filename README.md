@@ -12,6 +12,7 @@
 - [Faster User Object Creation](https://glebbahmutov.com/blog/faster-user-creation/)
 - [Crawl Weather Using Cypress](https://glebbahmutov.com/blog/crawl-weather/)
 - [Minimize Mailosaur Use](https://glebbahmutov.com/blog/minimize-mailosaur-use/)
+- [Cypress Tests For Apps That Use Central State](https://glebbahmutov.com/blog/test-apps-that-use-central-state/)
 
 Look at the presentation slides [Flexible Data Setup And Caching For Cypress.io Tests](https://slides.com/bahmutov/data-for-e2e-tests).
 
