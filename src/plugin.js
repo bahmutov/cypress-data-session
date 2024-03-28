@@ -43,7 +43,7 @@ function cypressDataSessionPlugin(on, config) {
     debug('deepClear', key)
     debug('existing keys: %o', Object.keys(savedValues))
 
-    if (!key in savedValues) {
+    if ((!key) in savedValues) {
       debug('could not find saved session "%s"', key)
       return false
     }
@@ -71,6 +71,7 @@ function cypressDataSessionPlugin(on, config) {
     'dataSession:print': printDataSessions,
   })
 
+  config.env.cypressDataSessionPluginRegistered = true
   debug('registered plugin tasks')
 }
 

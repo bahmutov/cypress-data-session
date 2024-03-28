@@ -5,6 +5,8 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       require('./src/plugin')(on, config)
+      // IMPORTANT: return the config object
+      return config
     },
     supportFile: false,
     excludeSpecPattern: 'utils.js',
