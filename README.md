@@ -82,7 +82,7 @@ import 'cypress-data-session'
 
 If you plan to use the [shareAcrossSpecs](#shareacrossspecs) option, you need to load this plugin from your plugin file
 
-### v10
+### v10+
 
 ```js
 // cypress.config.js
@@ -93,6 +93,7 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       registerDataSession(on, config)
+      // IMPORTANT: return the config object
       return config
     },
   },
@@ -105,6 +106,8 @@ export default defineConfig({
 // cypress/plugin/index.js
 module.exports = (on, config) => {
   require('cypress-data-session/src/plugin')(on, config)
+  // IMPORTANT: return the config object
+  return config
 }
 ```
 

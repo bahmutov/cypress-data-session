@@ -23,6 +23,14 @@ function isTestRunning() {
   return !Boolean(Cypress.mocha.getRunner().stopped)
 }
 
+/**
+ * If any of the data sessions are shared with the plugin space
+ * then the plugin should have registered a task
+ */
+function isPluginRegistered() {
+  return Cypress.env('cypressDataSessionPluginRegistered') === true
+}
+
 function formDataKey(name) {
   if (!name) {
     throw new Error('Missing name')
@@ -466,10 +474,14 @@ Cypress.Commands.add(
 Cypress.clearDataSessions = () => {
   // clear any sessions stored in the plugin space
   function clearSharedSessions() {
-    if (isTestRunning()) {
-      return cy.task('dataSession:clearAll')
+    if (isPluginRegistered()) {
+      if (isTestRunning()) {
+        return cy.task('dataSession:clearAll')
+      } else {
+        return cy.now('task', 'dataSession:clearAll')
+      }
     } else {
-      return cy.now('task', 'dataSession:clearAll')
+      return cy.wrap(null, { log: false })
     }
   }
 
@@ -507,13 +519,15 @@ Cypress.clearDataSession = (name) => {
   }
   // clears the data from the plugin side
   function clearSharedDataSession() {
-    if (insideTest) {
-      // delete the alias
-      const context = Object.getPrototypeOf(cy.state('ctx'))
-      delete context[name]
-      return cy.task('dataSession:clear', dataKey, { log: false })
-    } else {
-      return cy.now('task', 'dataSession:clear', dataKey)
+    if (isPluginRegistered()) {
+      if (insideTest) {
+        // delete the alias
+        const context = Object.getPrototypeOf(cy.state('ctx'))
+        delete context[name]
+        return cy.task('dataSession:clear', dataKey, { log: false })
+      } else {
+        return cy.now('task', 'dataSession:clear', dataKey)
+      }
     }
   }
 
