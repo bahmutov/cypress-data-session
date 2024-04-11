@@ -32,7 +32,7 @@
     "cypress": "13.7.2",
     "prettier": "3.2.5",
     "semantic-release": "23.0.8",
-    "typescript": "5.4.4"
+    "typescript": "5.4.5"
   },
   "dependencies": {
     "cypress-plugin-config": "^1.2.0",
