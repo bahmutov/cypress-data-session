@@ -33,6 +33,10 @@ And in my course [Testing The Swag Store](https://cypress.tips/courses/swag-stor
 - [Lesson 14: Instant login using cypress-data-session](https://cypress.tips/courses/swag-store/lessons/lesson14)
 - [Bonus 33: Expire data session after N milliseconds](https://cypress.tips/courses/swag-store/lessons/bonus33)
 
+And in my course [Cypress Network Testing Exercises](https://cypress.tips/courses/network-testing)
+
+- [Bonus 142: Cache items that are expensive to create](https://cypress.tips/courses/network-testing/lessons/bonus142)
+
 ## cy.dataSession vs cy.session
 
 Some people have noticed similarities between `cy.dataSession` command implemented by this plugin and the [cy.session](https://on.cypress.io/session) command included in Cypress itself. Here is my table of differences.
