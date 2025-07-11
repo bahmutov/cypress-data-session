@@ -411,7 +411,37 @@ it('works 4', () => {
 
 ### recomputeOnRetry
 
-Sometimes you want to enable test retries, but the data caching makes it hard to understand and run the full test. You can set the `recomputeOnRetry: true` to automatically call the `setup` again on tet retries.
+Sometimes you want to enable [test retries](https://on.cypress.io/test-retries), but the data caching makes it hard to understand and run the full test. You can set the `recomputeOnRetry: true` to automatically call the `setup` again on tet retries.
+
+```js
+const dataSessionName = 'user v1'
+// 👎 instead of this way of clearing and recreating
+// the data session
+beforeEach(() => {
+  // create new user if the test has failed
+  // and now retries again
+  if (Cypress.currentRetry) {
+    Cypress.clearDataSession(dataSessionName)
+  }
+})
+it('...', () => {
+  cy.dataSession({
+    name: dataSessionName,
+    ...
+  })
+})
+
+// 👍 you can simply use an option
+// to clear the saved session and set it up again
+// on test retry
+it('...', () => {
+  cy.dataSession({
+    name: dataSessionName,
+    recomputeOnRetry: true,
+    ...
+  })
+})
+```
 
 ## Flow
 
