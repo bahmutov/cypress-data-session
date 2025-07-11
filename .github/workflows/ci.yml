@@ -9,14 +9,14 @@ jobs:
 
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           # check types
           build: npm run lint
 
       - name: Semantic Release 🚀
         if: github.ref == 'refs/heads/main'
-        uses: cycjimmy/semantic-release-action@v3
+        uses: cycjimmy/semantic-release-action@v4
         with:
           branch: main
         env:
