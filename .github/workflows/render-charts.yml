@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Render images for every Mermaid diagram in all Markdown files (*.md) in the repo
         # https://github.com/bahmutov/cypress-data-session/issues/115
