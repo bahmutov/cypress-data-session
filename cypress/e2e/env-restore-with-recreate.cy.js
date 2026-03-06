@@ -12,7 +12,7 @@ describe('Restores data session', () => {
   })
 
   // https://github.com/bahmutov/cypress-data-session/issues/42
-  it('sets the session in Cypress.env', function () {
+  it('sets the session in Cypress.expose', function () {
     /** @type Cypress.DataSessionOptions */
     const parentOptions = {
       name: 'parent',

@@ -8,7 +8,7 @@ describe('Restores data session', () => {
     Cypress.clearDataSession('child')
   })
 
-  it('sets the session in Cypress.env', function () {
+  it('sets the session in Cypress.expose', function () {
     /** @type Cypress.DataSessionOptions */
     const parentOptions = {
       name: 'parent',
@@ -49,7 +49,7 @@ describe('Restores data session', () => {
         )
       })
       .then(() => {
-        delete Cypress.env()[key]
+        delete Cypress.expose()[key]
       })
       .then(() => {
         cy.dataSession(parentOptions)

@@ -3,7 +3,7 @@
 import '../../src'
 
 beforeEach(() => {
-  Cypress.env('cypressDataSessionPluginRegistered', true)
+  Cypress.expose('cypressDataSessionPluginRegistered', true)
 })
 
 it('calls task to clear the data session', () => {
@@ -29,7 +29,7 @@ it('calls task to clear the data session', () => {
 })
 
 it('does not call the task to clear the data session', () => {
-  Cypress.env('cypressDataSessionPluginRegistered', false)
+  Cypress.expose('cypressDataSessionPluginRegistered', false)
   cy.dataSession({
     name: 'Aa',
     setup() {

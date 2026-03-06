@@ -246,7 +246,7 @@ cy.dataSession({
 
 ### shareAcrossSpecs
 
-By default, the data session value is saved inside `Cypress.env` object. This object is reset whenever the spec gets reloaded (think Cmd+R press or the full browser reload). The object is gone when the `cypress run` finishes with a spec and opens another one. If you want the data value to persist across the browser reloads, or be shared across specs, use the `shareAcrossSpecs: true` option.
+By default, the data session value is saved inside `Cypress.expose` object. This object is reset whenever the spec gets reloaded (think Cmd+R press or the full browser reload). The object is gone when the `cypress run` finishes with a spec and opens another one. If you want the data value to persist across the browser reloads, or be shared across specs, use the `shareAcrossSpecs: true` option.
 
 ```js
 cy.dataSession({
@@ -539,6 +539,10 @@ Cypress.clearDataSession('user')
 ```
 
 ## Migration
+
+### from v2 to v3
+
+Requires Cypress v15.10.0 with [Cypress.expose](https://on.cypress.io/expose) support.
 
 ### from v1 to v2
 

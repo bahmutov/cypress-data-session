@@ -3,7 +3,7 @@
 import '../../src'
 
 beforeEach(() => {
-  const keys = Cypress._.keys(Cypress.env())
+  const keys = Cypress._.keys(Cypress.expose())
   console.log(keys)
   expect(keys).to.not.include(Cypress.formDataSessionKey('A'))
 })

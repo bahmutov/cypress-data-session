@@ -15,7 +15,7 @@ describe('restores session from stored', () => {
     expect(value)
 
     cy.then(() => {
-      // the cached data was put into Cypress.env
+      // the cached data was put into Cypress.expose
       expect(getPluginConfigValues())
         .to.have.property(key)
         .and.to.be.an('object')
@@ -36,10 +36,10 @@ describe('restores session from stored', () => {
   }
 
   // run the tests in order to verify
-  // 1. the data session was stored from the plugin space and saved in Cypress.env
+  // 1. the data session was stored from the plugin space and saved in Cypress.expose
   // 2. the alias was recreated correctly
   // https://github.com/bahmutov/cypress-data-session/issues/39
-  it('1. puts restored value into Cypress.env', () => {
+  it('1. puts restored value into Cypress.expose', () => {
     Cypress.clearDataSessions()
 
     cy.dataSession({
@@ -55,7 +55,7 @@ describe('restores session from stored', () => {
       })
       .then(() => {
         cy.log('**removing from memory**')
-        delete Cypress.env()[key]
+        delete Cypress.expose()[key]
       })
       .then(() => {
         cy.log('**data session again**')

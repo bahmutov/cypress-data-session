@@ -71,7 +71,7 @@ function cypressDataSessionPlugin(on, config) {
     'dataSession:print': printDataSessions,
   })
 
-  config.env.cypressDataSessionPluginRegistered = true
+  config.expose.cypressDataSessionPluginRegistered = true
   debug('registered plugin tasks')
 }
 
