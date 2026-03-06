@@ -2,7 +2,9 @@
 
 import '../../src'
 
-describe('HTTP site', { baseUrl: 'http://neverssl.com' }, () => {
+// seems like the site is down
+// SKIP https://github.com/bahmutov/cypress-data-session/issues/341
+describe.skip('HTTP site', { baseUrl: 'http://neverssl.com' }, () => {
   const name = 'http-site'
 
   beforeEach(() => {
