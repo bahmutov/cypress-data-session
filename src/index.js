@@ -28,7 +28,7 @@ function isTestRunning() {
  * then the plugin should have registered a task
  */
 function isPluginRegistered() {
-  return Cypress.env('cypressDataSessionPluginRegistered') === true
+  return Cypress.expose('cypressDataSessionPluginRegistered') === true
 }
 
 function formDataKey(name) {
@@ -154,7 +154,7 @@ Cypress.Commands.add(
       }
     }
 
-    const pluginDisabled = Cypress.env('dataSessions') === false
+    const pluginDisabled = Cypress.expose('dataSessions') === false
 
     const dataKey = formDataKey(name)
 
@@ -570,7 +570,7 @@ Cypress.dataSessions = (enable) => {
   if (typeof enable !== 'boolean') {
     throw new Error('dataSessions argument must be a boolean or undefined')
   }
-  Cypress.env('dataSessions', Boolean(enable))
+  Cypress.expose('dataSessions', Boolean(enable))
   debug('set data sessions enabled? %o', Boolean(enable))
 }
 

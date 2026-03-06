@@ -16,6 +16,11 @@ jobs:
       - name: Checkout 🛎
         uses: actions/checkout@v6
 
+      - name: Use the right Node version 🧑‍🦲
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
         uses: cypress-io/github-action@v6
