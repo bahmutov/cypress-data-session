@@ -23,7 +23,7 @@ jobs:
 
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v7.1.9
+        uses: cypress-io/github-action@v7.1.10
         with:
           # check types
           build: npm run lint
