@@ -2,7 +2,7 @@ name: ci
 on: push
 jobs:
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       # allow the release step to comment on
       # issues, pull requests, and write to the repo
