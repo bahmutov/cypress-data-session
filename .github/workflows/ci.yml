@@ -30,7 +30,7 @@ jobs:
 
       - name: Semantic Release 🚀
         if: github.ref == 'refs/heads/main'
-        uses: cycjimmy/semantic-release-action@v8.0.1
+        uses: cycjimmy/semantic-release-action@v8.1.0
         with:
           branch: main
         env:
