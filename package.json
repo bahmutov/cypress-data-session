@@ -10,7 +10,7 @@
   "scripts": {
     "test": "cypress run",
     "semantic-release": "semantic-release",
-    "lint": "tsc --pretty --noEmit --allowJS cypress/**/*.js",
+    "lint": "tsc --pretty --noEmit --allowJS --lib esnext,dom cypress/e2e/**/*.js",
     "cy:open": "cypress open --e2e --browser electron",
     "update-badges": "npx -p dependency-version-badge update-badge cypress"
   },
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/bahmutov/cypress-data-session#readme",
   "devDependencies": {
-    "cypress": "15.15.0",
+    "cypress": "16.2.1",
     "prettier": "3.9.10",
     "semantic-release": "25.0.9",
     "typescript": "5.5.4"
