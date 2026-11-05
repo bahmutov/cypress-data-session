@@ -74,6 +74,17 @@ declare namespace Cypress {
      * on the test retry.
      */
     recomputeOnRetry?: boolean
+    /**
+     * Custom hash property that can be used to invalidate the data session when it changes.
+     * @example
+     *  ```js
+     * // create a user but invalidates the session if any of the parameters change
+     * // if you change the user name, the data session will be recomputed
+     * const user = { id: 1, name: 'Alice' }
+     * cy.dataSession({ name: 'user', setup: () => user, hash: JSON.stringify(user) })
+     *  ```
+     */
+    hash?: string
   }
 
   type Validate = ((x: any) => Chainable<boolean>) | ((x: any) => boolean)
