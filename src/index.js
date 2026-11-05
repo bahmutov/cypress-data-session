@@ -81,6 +81,8 @@ Cypress.Commands.add(
     let expires
     let limit
     let recomputeOnRetry
+    /** @type {string} User can pass custom hash to use for data session */
+    let hash = ''
 
     // check if we are using options / separate arguments
     if (typeof name === 'object') {
@@ -100,6 +102,12 @@ Cypress.Commands.add(
       expires = options.expires
       limit = options.limit
       recomputeOnRetry = options.recomputeOnRetry
+      hash = options.hash || ''
+    }
+    if (typeof hash !== 'string') {
+      throw new Error(
+        `cypress-data-session: the hash for session ${name} must be a string`,
+      )
     }
 
     if (typeof limit !== 'undefined') {
@@ -179,6 +187,7 @@ Cypress.Commands.add(
         dependsOn,
         showValue,
         limit,
+        hash,
       }) + setup.toString()
 
     const saveData = (data) => {

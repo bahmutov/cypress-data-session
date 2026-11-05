@@ -443,6 +443,18 @@ it('...', () => {
 })
 ```
 
+### custom hash
+
+Sometimes you want to keep the same session name, but recompute it whenever some data changes. You can pass a custom `hash` string with the options; the hash is included with other options plus setup function's source code when deciding if the session needs to be recreated. A typical example would be hashing an object used inside the setup:
+
+```js
+// create a user but invalidates the session if any of the parameters change
+// if you change the user name, the data session will be recomputed
+const user = { id: 1, name: 'Alice' }
+const hash = JSON.stringify(user) // or use any hashing approach
+cy.dataSession({ name: 'user', setup: () => user, hash })
+```
+
 ## Flow
 
 Consider the `cy.dataSession(options)` where the `options` object might have the following method callbacks: `validate`, `init`, `setup`, `preSetup`, `recreate`, and `onInvalidated`. Your case might provide just some of these callback functions, but let's say you have provided all of them. Here is how they will be called.
