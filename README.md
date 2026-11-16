@@ -69,6 +69,7 @@ Some people have noticed similarities between `cy.dataSession` command implement
 - [Quickly Create A User And Log in Using Dependent Data Sessions](https://www.youtube.com/watch?v=0KTGc83wSoA)
 - [Introduction To cypress-data-session Plugin](https://youtu.be/7ipCvJQixI0) for setting up 3 todo items in a TodoMVC app
 - [Instant AWS Cognito Login Using cypress-data-session](https://youtu.be/eB9RqBmnN4I)
+- [cypress-data-session hash option](https://youtu.be/0A3KZIlDujQ)
 
 ## Install
 
