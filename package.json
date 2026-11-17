@@ -31,7 +31,7 @@
   "devDependencies": {
     "cypress": "16.3.0",
     "prettier": "3.10.1",
-    "semantic-release": "25.0.9",
+    "semantic-release": "26.0.1",
     "typescript": "7.0.2"
   },
   "dependencies": {
